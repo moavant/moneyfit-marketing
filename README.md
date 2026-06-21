@@ -39,7 +39,7 @@ node render.mjs content/2026-W26-구독다이어트.json
     { "type": "cover", "title": "줄바꿈은 |, 강조는 {텅}", "sub": "...", "footL": "...", "badge": "밀어서 보기 →" },
     { "type": "stat",  "num": "01", "title": "...", "rows": [["항목","값"],["합계","값","total"]], "note": "..." },
     { "type": "list",  "num": "02", "title": "...", "items": ["...","..."], "tip": "💡 ..." },
-    { "type": "cta",   "title": "...", "sub": "...", "features": ["...","..."], "cta": "지금 무료로 시작하기 →", "url": "Google Play에서 ‘머니핏 가계부’ 검색" }
+    { "type": "cta",   "title": "...", "sub": "...", "features": ["...","..."], "cta": "지금 무료로 시작하기", "store": "Google Play에서 ‘머니핏 가계부’ 검색" }
   ]
 }
 ```

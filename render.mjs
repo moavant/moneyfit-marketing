@@ -54,8 +54,8 @@ li .x{flex:none;width:52px;height:52px;border-radius:50%;background:#FDE8E8;colo
 .fcard{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:32px;padding:44px 48px;margin-top:8px;display:flex;flex-direction:column;gap:18px}
 .fcard .line{display:flex;align-items:center;gap:20px;font-size:40px;font-weight:600}
 .check{color:#5BE7A9;font-weight:900}
-.btn{background:#fff;color:#1A73E8;border-radius:999px;padding:34px;text-align:center;font-size:46px;font-weight:800;margin-top:36px}
-.url{margin-top:26px;text-align:center;font-size:30px;opacity:.85}
+.hint{text-align:center;font-size:34px;font-weight:700;opacity:.9;margin-bottom:22px}
+.btn{background:#fff;color:#1A73E8;border-radius:999px;padding:34px 28px;text-align:center;font-size:40px;font-weight:800}
 `;
 
 function body(card, meta) {
@@ -80,10 +80,12 @@ function body(card, meta) {
     case 'cta': {
       const feats = (card.features || []).map(f => `<div class="line"><span class="check">✓</span> ${esc(f)}</div>`).join('');
       const mark = LOGO_URI ? `<span class="mark"><img src="${LOGO_URI}" alt=""></span>` : `<span class="mark">₩</span>`;
+      const hint = card.cta ? `<div class="hint">${esc(card.cta)}</div>` : '';
+      const store = esc(card.store || card.url || 'Google Play에서 ‘머니핏 가계부’ 검색');
       return `<div class="logo">${mark} ${esc(card.brand || '머니핏 가계부')}</div>
         <div><h1>${rich(card.title)}</h1><p class="sub">${rich(card.sub)}</p></div>
         <div class="fcard">${feats}</div>
-        <div><div class="btn">${esc(card.cta || '지금 무료로 시작하기 →')}</div><div class="url">${esc(card.url || '')}</div></div>`;
+        <div>${hint}<div class="btn">🔎 ${store}</div></div>`;
     }
     default:
       throw new Error(`Unknown card type: ${card.type}`);
