@@ -1,0 +1,14 @@
+{
+  "name": "moneyfit-marketing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "머니핏 가계부 카드뉴스 마케팅 — HTML/CSS 템플릿 → PNG 카드 자동 렌더",
+  "scripts": {
+    "render": "node render.mjs",
+    "postinstall": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
