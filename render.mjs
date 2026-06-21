@@ -7,6 +7,12 @@ import { chromium } from 'playwright';
 
 const W = 1080, H = 1350;
 
+// 머니핏 로고 (있으면 인라인 data URI로 임베드 → setContent 렌더에서도 표시됨)
+let LOGO_URI = '';
+try {
+  LOGO_URI = `data:image/png;base64,${readFileSync(new URL('./assets/moneyfit-logo.png', import.meta.url)).toString('base64')}`;
+} catch { /* 로고 없으면 ₩ 폴백 */ }
+
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // "a|b{c}d" → 줄바꿈(|) + 강조({}) 처리
 const rich = (s = '') =>
@@ -41,7 +47,8 @@ li .x{flex:none;width:52px;height:52px;border-radius:50%;background:#FDE8E8;colo
 .tip{background:#1A73E8;color:#fff;border-radius:36px;padding:48px 52px;font-size:44px;line-height:1.45;font-weight:700;margin-top:8px}
 .foot{font-size:28px;color:#9AA8B6;font-weight:600}
 .cta body,.logo{display:flex;align-items:center;gap:18px;font-size:38px;font-weight:800}
-.logo .mark{width:64px;height:64px;border-radius:18px;background:#fff;color:#1A73E8;font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.logo .mark{width:74px;height:74px;border-radius:18px;background:#fff;color:#1A73E8;font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo .mark img{width:100%;height:100%;object-fit:cover;transform:scale(1.32)}
 .cta h1{font-size:96px;line-height:1.18;font-weight:800;letter-spacing:-2px}
 .cta .sub{margin-top:36px;font-size:44px;line-height:1.5;font-weight:500;opacity:.92}
 .fcard{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:32px;padding:44px 48px;margin-top:8px;display:flex;flex-direction:column;gap:18px}
@@ -72,7 +79,8 @@ function body(card, meta) {
     }
     case 'cta': {
       const feats = (card.features || []).map(f => `<div class="line"><span class="check">✓</span> ${esc(f)}</div>`).join('');
-      return `<div class="logo"><span class="mark">₩</span> ${esc(card.brand || '머니핏 가계부')}</div>
+      const mark = LOGO_URI ? `<span class="mark"><img src="${LOGO_URI}" alt=""></span>` : `<span class="mark">₩</span>`;
+      return `<div class="logo">${mark} ${esc(card.brand || '머니핏 가계부')}</div>
         <div><h1>${rich(card.title)}</h1><p class="sub">${rich(card.sub)}</p></div>
         <div class="fcard">${feats}</div>
         <div><div class="btn">${esc(card.cta || '지금 무료로 시작하기 →')}</div><div class="url">${esc(card.url || '')}</div></div>`;
