@@ -33,6 +33,8 @@ node render.mjs content/2026-W26-구독다이어트.json
 {
   "issue": "2026-W26-구독다이어트",     // 파일/폴더 이름
   "label": "머니핏 머니 클래스",          // 하단 브랜드 라벨
+  "caption": "인스타 본문 + 해시태그 (붙여넣기용)",   // → output/<issue>/caption.txt
+  "captionThreads": "스레드용 짧은 본문 (500자 이내)", // → output/<issue>/caption-threads.txt
   "cards": [
     { "type": "cover", "title": "줄바꿈은 |, 강조는 {텅}", "sub": "...", "footL": "...", "badge": "밀어서 보기 →" },
     { "type": "stat",  "num": "01", "title": "...", "rows": [["항목","값"],["합계","값","total"]], "note": "..." },

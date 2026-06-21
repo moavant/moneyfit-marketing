@@ -103,6 +103,15 @@ async function renderFile(jsonPath, browser) {
     console.log('✓', file);
   }
   await page.close();
+  // 발행용 본문 캡션 텍스트도 같이 출력 (인스타/스레드 붙여넣기용)
+  if (data.caption) {
+    const f = join(outDir, 'caption.txt');
+    writeFileSync(f, data.caption.trimEnd() + '\n'); console.log('✓', f);
+  }
+  if (data.captionThreads) {
+    const f = join(outDir, 'caption-threads.txt');
+    writeFileSync(f, data.captionThreads.trimEnd() + '\n'); console.log('✓', f);
+  }
   return { issue, total };
 }
 
