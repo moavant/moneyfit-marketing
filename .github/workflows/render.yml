@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 직전 커밋과 비교해 "이번에 새로 추가된 콘텐츠"만 골라내기 위함
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -28,8 +30,39 @@ jobs:
           curl -fsSL -o /tmp/pretendard.zip https://github.com/orioncactus/pretendard/releases/download/v1.3.9/Pretendard-1.3.9.zip || true
           if [ -f /tmp/pretendard.zip ]; then unzip -o /tmp/pretendard.zip -d /tmp/pretendard >/dev/null && find /tmp/pretendard -name '*.otf' -o -name '*.ttf' | xargs -I{} cp {} ~/.fonts/ 2>/dev/null || true; fi
           fc-cache -f
-      - name: 카드 렌더
-        run: node render.mjs
+      - name: 이번 푸시에서 변경된 카드뉴스 콘텐츠 추출
+        id: changed
+        run: |
+          FILES=""
+          if [ "${{ github.event_name }}" = "push" ]; then
+            BEFORE="${{ github.event.before }}"
+            # 직전 커밋이 유효하면 그 사이 변경된 content/*.json 만, 아니면(신규 브랜치 등) 비워서 전체 렌더 폴백
+            if git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+              FILES=$(git diff --name-only "$BEFORE" "${{ github.sha }}" -- 'content/*.json' | grep -E '\.json$' || true)
+            else
+              FILES=$(git diff --name-only HEAD~1 HEAD -- 'content/*.json' 2>/dev/null | grep -E '\.json$' || true)
+            fi
+          fi
+          echo "변경된 콘텐츠 파일:"; echo "${FILES:-(없음 → content 전체 렌더)}"
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: 카드 렌더 (변경분만, 없으면 전체)
+        run: |
+          FILES="${{ steps.changed.outputs.files }}"
+          if [ -z "$(echo "$FILES" | tr -d '[:space:]')" ]; then
+            echo "→ 변경된 콘텐츠 없음(수동 실행/템플릿 변경 등): content 전체 렌더"
+            node render.mjs
+          else
+            echo "→ 이번에 새로 추가/변경된 카드뉴스만 렌더"
+            echo "$FILES" | while IFS= read -r f; do
+              [ -z "$f" ] && continue
+              echo "렌더: $f"
+              node render.mjs "$f"
+            done
+          fi
       - name: 결과 업로드 (다운로드용 아티팩트)
         uses: actions/upload-artifact@v4
         with:
