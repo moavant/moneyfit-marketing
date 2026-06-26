@@ -109,6 +109,8 @@ if (urls.length === 0) {
     children.push(item.id);
     console.log(`  · 캐러셀 아이템 ${children.length}/${urls.length}`);
   }
+  // 스레드는 각 아이템이 처리완료(FINISHED) 돼야 캐러셀에 묶을 수 있다
+  for (const id of children) await waitReady(id);
   const car = await api('POST', `${UID}/threads`, { media_type: 'CAROUSEL', children: children.join(','), text });
   creationId = car.id;
 }
