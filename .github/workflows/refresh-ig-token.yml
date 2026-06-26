@@ -1,7 +1,7 @@
-name: 인스타 접속키 자동 갱신
+name: 인스타·스레드 접속키 자동 갱신
 
-# 인스타 장기 접속키는 60일 후 만료된다. 매월 1회 갱신해 항상 유효하게 유지한다.
-# 갱신된 키로 금고(IG_ACCESS_TOKEN)를 덮어쓴다 — 이 쓰기에는 GH_PAT(Secrets 쓰기 권한)가 필요하다.
+# 인스타/스레드 장기 접속키는 60일 후 만료된다. 매월 1회 갱신해 항상 유효하게 유지한다.
+# 갱신된 키로 금고(IG_ACCESS_TOKEN / THREADS_ACCESS_TOKEN)를 덮어쓴다 — 쓰기에는 GH_PAT(Secrets 쓰기 권한)가 필요하다.
 on:
   schedule:
     - cron: '0 3 1 * *'   # 매월 1일 03:00 UTC (60일 만료 한참 전 여유 갱신)
@@ -21,28 +21,31 @@ jobs:
       - name: 접속키 갱신 + 금고 업데이트
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           GH_PAT: ${{ secrets.GH_PAT }}
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
-          if [ -z "${IG_ACCESS_TOKEN:-}" ]; then echo "✗ IG_ACCESS_TOKEN 금고가 비어있음"; exit 1; fi
           if [ -z "${GH_PAT:-}" ]; then echo "✗ GH_PAT 금고가 비어있음"; exit 1; fi
 
-          # 1) 새 장기 토큰 요청 (토큰이 24h 이상 됐을 때만 발급됨)
-          RESP=$(curl -sS "https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${IG_ACCESS_TOKEN}" || true)
-          NEW=$(echo "$RESP" | jq -er '.access_token' 2>/dev/null || true)
+          # 공통 갱신 함수: $1=라벨 $2=호스트 $3=grant_type $4=현재토큰 $5=시크릿이름
+          refresh() {
+            local label="$1" host="$2" grant="$3" cur="$4" name="$5" resp new days msg
+            if [ -z "$cur" ]; then echo "ℹ️ ${name} 미설정 — ${label} 갱신 건너뜀"; return 0; fi
+            resp=$(curl -sS "https://${host}/refresh_access_token?grant_type=${grant}&access_token=${cur}" || true)
+            new=$(echo "$resp" | jq -er '.access_token' 2>/dev/null || true)
+            if [ -n "$new" ] && [ "$new" != "null" ]; then
+              echo "::add-mask::$new"
+              days=$(echo "$resp" | jq -r '((.expires_in // 0)/86400 | floor)')
+              echo "${label}: 새 접속키 발급 (유효 약 ${days}일)"
+            else
+              msg=$(echo "$resp" | jq -r '.error.message // "응답 파싱 실패"' 2>/dev/null || echo "?")
+              echo "${label}: 갱신 생략 (${msg}). 기존 키 유지."
+              new="$cur"
+            fi
+            printf '%s' "$new" | GH_TOKEN="$GH_PAT" gh secret set "$name" --repo "$REPO"
+            echo "✅ ${name} 금고 업데이트 완료"
+          }
 
-          if [ -n "$NEW" ] && [ "$NEW" != "null" ]; then
-            echo "::add-mask::$NEW"
-            DAYS=$(echo "$RESP" | jq -r '((.expires_in // 0)/86400 | floor)')
-            echo "새 접속키 발급됨 (유효 약 ${DAYS}일)"
-          else
-            # 아직 새 토큰(24h 미만)이라 갱신 불필요한 경우 등 — 기존 키 유지(금고 쓰기 경로는 검증)
-            MSG=$(echo "$RESP" | jq -r '.error.message // "응답 파싱 실패"' 2>/dev/null || echo "?")
-            echo "갱신 생략 (사유: ${MSG}). 기존 키 유지."
-            NEW="$IG_ACCESS_TOKEN"
-          fi
-
-          # 2) 금고(IG_ACCESS_TOKEN) 덮어쓰기 — GH_PAT 사용
-          printf '%s' "$NEW" | GH_TOKEN="$GH_PAT" gh secret set IG_ACCESS_TOKEN --repo "$REPO"
-          echo "✅ IG_ACCESS_TOKEN 금고 업데이트 완료"
+          refresh "인스타" "graph.instagram.com" "ig_refresh_token" "${IG_ACCESS_TOKEN:-}" "IG_ACCESS_TOKEN"
+          refresh "스레드" "graph.threads.net" "th_refresh_token" "${THREADS_ACCESS_TOKEN:-}" "THREADS_ACCESS_TOKEN"

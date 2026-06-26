@@ -1,4 +1,4 @@
-name: 인스타 자동 게시
+name: 인스타·스레드 자동 게시
 
 # content/ 에 새 카드뉴스 JSON 이 main 에 올라오면 → 렌더 → 이미지 공개(cards-cdn) → 인스타 캐러셀 자동 게시.
 # 수동 실행(workflow_dispatch) 시 특정 파일 하나만 게시할 수 있다(첫 테스트용).
@@ -68,6 +68,7 @@ jobs:
         if: steps.target.outputs.files != ''
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           FILES: ${{ steps.target.outputs.files }}
@@ -102,12 +103,18 @@ jobs:
           git push -qf "$REMOTE" cards-cdn
           cd "$WS"
 
-          # 3) 인스타 게시 (이슈별; 실패하면 set -e 로 중단 → 4번 비우기 미실행 → 디버그/재시도 가능)
+          # 3) 인스타 + 스레드 게시 (이슈별; 실패하면 set -e 로 중단 → 4번 비우기 미실행 → 디버그/재시도 가능)
           for ISSUE in $ISSUES; do
             ENC=$(node -e "process.stdout.write(encodeURIComponent(process.argv[1]))" "$ISSUE")
             BASE="https://raw.githubusercontent.com/${REPO}/cards-cdn/${ENC}"
             echo "▶ 인스타 게시: $ISSUE"
             node post-instagram.mjs "output/$ISSUE" "$BASE"
+            if [ -n "${THREADS_ACCESS_TOKEN:-}" ]; then
+              echo "▶ 스레드 게시: $ISSUE"
+              node post-threads.mjs "output/$ISSUE" "$BASE"
+            else
+              echo "ℹ️ THREADS_ACCESS_TOKEN 미설정 — 스레드 게시 건너뜀(인스타만)"
+            fi
           done
 
           # 4) 업로드 완료 → cards-cdn 비우기 (GitHub 용량 절약; 인스타 게시물엔 영향 없음)
