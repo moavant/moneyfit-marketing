@@ -8,8 +8,24 @@ import { join } from 'node:path';
 const TOKEN = process.env.THREADS_ACCESS_TOKEN;
 const GRAPH = 'https://graph.threads.net';
 const VER = 'v1.0';
-const LINK = 'https://moavant.com/mfAd';   // 스레드 본문에 넣는 다운로드 링크
+const DL_LINE = '다운로드 링크(Android) : https://moavant.com/mfAd'; // 스레드 본문 CTA(스레드는 링크가 클릭됨)
 const LIMIT = 500;                          // 스레드 텍스트 글자 제한
+
+// 'Google Play 검색' CTA 줄을 다운로드 링크 줄로 치환 (+ 남은 '무료로 시작' CTA 줄 제거)
+function replaceStoreCTA(t = '') {
+  let done = false;
+  let lines = t.split('\n').map((l) => {
+    if (!done && /Google\s*Play/i.test(l)) { done = true; return DL_LINE; }
+    return l;
+  });
+  lines = lines.filter((l) => l === DL_LINE || !/무료로\s*시작/.test(l));
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+// 해시태그 줄 제거 (스레드 전용)
+function stripHashtags(t = '') {
+  return t.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
 
 const [dir, baseUrl] = process.argv.slice(2);
 if (!TOKEN) { console.error('✗ THREADS_ACCESS_TOKEN 환경변수가 없습니다.'); process.exit(1); }
@@ -77,13 +93,15 @@ const UID = me.id;
 if (!UID) throw new Error('스레드 사용자 ID를 가져오지 못했습니다(토큰 권한 확인).');
 console.log(`스레드 계정: @${me.username || '?'} (id ${UID})`);
 
-// 2) 본문 = caption-threads.txt + 다운로드 링크 (500자 보호)
+// 2) 본문 = caption-threads.txt → CTA를 다운로드 링크로 치환 + 해시태그 제거
 let cap = '';
 try { cap = readFileSync(join(dir, 'caption-threads.txt'), 'utf-8').trim(); } catch { /* 없으면 링크만 */ }
-let text = cap ? `${cap}\n\n${LINK}` : LINK;
-if ([...text].length > LIMIT) {
-  const room = LIMIT - LINK.length - 2;
-  text = `${[...cap].slice(0, Math.max(0, room - 1)).join('').trimEnd()}…\n\n${LINK}`;
+let text = stripHashtags(replaceStoreCTA(cap));
+if (!text.includes('moavant.com/mfAd')) text = (text ? `${text}\n\n` : '') + DL_LINE; // CTA 없던 경우 링크 보강
+if ([...text].length > LIMIT) {   // 거의 안 일어나지만 안전장치: 본문만 축약, 링크는 보존
+  const body = text.replace(DL_LINE, '').trim();
+  const room = LIMIT - DL_LINE.length - 2;
+  text = `${[...body].slice(0, Math.max(0, room - 1)).join('').trimEnd()}…\n\n${DL_LINE}`;
 }
 
 // 3) 카드 이미지
