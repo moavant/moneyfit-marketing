@@ -44,5 +44,5 @@ jobs:
           fi
 
           # 2) 금고(IG_ACCESS_TOKEN) 덮어쓰기 — GH_PAT 사용
-          printf '%s' "$NEW" | GH_TOKEN="$GH_PAT" gh secret set IG_ACCESS_TOKEN --repo "$REPO" --body-file -
+          printf '%s' "$NEW" | GH_TOKEN="$GH_PAT" gh secret set IG_ACCESS_TOKEN --repo "$REPO"
           echo "✅ IG_ACCESS_TOKEN 금고 업데이트 완료"
