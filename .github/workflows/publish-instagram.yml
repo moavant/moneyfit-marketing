@@ -12,6 +12,12 @@ on:
       issue:
         description: '게시할 content 파일 경로 (예: content/2026-W26-구독다이어트.json). 비우면 이번 푸시의 신규 추가분.'
         required: false
+      platform:
+        description: '게시 대상 (both / instagram / threads)'
+        required: false
+        default: 'both'
+        type: choice
+        options: [both, instagram, threads]
 
 permissions:
   contents: write
@@ -72,6 +78,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           FILES: ${{ steps.target.outputs.files }}
+          PLATFORM: ${{ github.event.inputs.platform || 'both' }}
         run: |
           set -euo pipefail
           REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
@@ -107,13 +114,17 @@ jobs:
           for ISSUE in $ISSUES; do
             ENC=$(node -e "process.stdout.write(encodeURIComponent(process.argv[1]))" "$ISSUE")
             BASE="https://raw.githubusercontent.com/${REPO}/cards-cdn/${ENC}"
-            echo "▶ 인스타 게시: $ISSUE"
-            node post-instagram.mjs "output/$ISSUE" "$BASE"
-            if [ -n "${THREADS_ACCESS_TOKEN:-}" ]; then
-              echo "▶ 스레드 게시: $ISSUE"
-              node post-threads.mjs "output/$ISSUE" "$BASE"
-            else
-              echo "ℹ️ THREADS_ACCESS_TOKEN 미설정 — 스레드 게시 건너뜀(인스타만)"
+            if [ "$PLATFORM" != "threads" ]; then
+              echo "▶ 인스타 게시: $ISSUE"
+              node post-instagram.mjs "output/$ISSUE" "$BASE"
+            fi
+            if [ "$PLATFORM" != "instagram" ]; then
+              if [ -n "${THREADS_ACCESS_TOKEN:-}" ]; then
+                echo "▶ 스레드 게시: $ISSUE"
+                node post-threads.mjs "output/$ISSUE" "$BASE"
+              else
+                echo "ℹ️ THREADS_ACCESS_TOKEN 미설정 — 스레드 게시 건너뜀"
+              fi
             fi
           done
 

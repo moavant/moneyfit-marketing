@@ -38,7 +38,7 @@ async function api(method, path, params = {}) {
         await sleep(4000 * attempt);
         continue;
       }
-      throw new Error(`API 실패 [${method} ${path}]: ${json?.error?.message || ('HTTP ' + res.status)}`);
+      { const e = json?.error || {}; throw new Error(`API 실패 [${method} ${path}]: ${e.message || ('HTTP ' + res.status)} | code=${e.code ?? ''} subcode=${e.error_subcode ?? ''} | ${e.error_user_title ?? ''} ${e.error_user_msg ?? ''}`); }
     } catch (e) {
       if (attempt < 4 && e.name === 'TypeError') { await sleep(4000 * attempt); continue; }
       throw e;
