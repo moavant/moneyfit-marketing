@@ -73,19 +73,10 @@ jobs:
           FILES: ${{ steps.target.outputs.files }}
         run: |
           set -euo pipefail
-          git config --global user.email "actions@github.com"
-          git config --global user.name "github-actions"
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          WS="$GITHUB_WORKSPACE"
 
-          # 1) 이미지 공개용 cards-cdn 가지 준비 (없으면 새로 만든다)
-          rm -rf /tmp/cdn
-          if git clone --depth 1 --branch cards-cdn "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" /tmp/cdn 2>/dev/null; then
-            echo "기존 cards-cdn 가지 사용"
-          else
-            git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" /tmp/cdn
-            ( cd /tmp/cdn && git checkout --orphan cards-cdn && git rm -rf . >/dev/null 2>&1 || true )
-          fi
-
-          # 2) 대상 파일 렌더 + 이미지 복사
+          # 1) 대상 파일 렌더
           ISSUES=""
           while IFS= read -r f; do
             [ -z "$f" ] && continue
@@ -93,25 +84,37 @@ jobs:
             node render.mjs "$f"
             ISSUE=$(node -e "const fs=require('fs'),p=require('path');const a=process.argv[1];process.stdout.write(JSON.parse(fs.readFileSync(a,'utf8')).issue||p.basename(a,'.json'))" "$f")
             echo "  issue=$ISSUE"
-            mkdir -p "/tmp/cdn/$ISSUE"
-            cp output/"$ISSUE"/card-*.png "/tmp/cdn/$ISSUE/"
             ISSUES="$ISSUES $ISSUE"
           done <<< "$FILES"
 
-          # 3) 이미지 공개(cards-cdn push) — 변경 있을 때만
-          ( cd /tmp/cdn
-            git add -A
-            if ! git diff --cached --quiet; then
-              git commit -m "cdn: 카드 이미지 게시"
-              git push origin cards-cdn
-            else
-              echo "cdn 변경 없음(이미 존재)"
-            fi )
+          # 2) cards-cdn 을 "이번 이미지만" 담은 새 orphan 으로 교체 (히스토리/누적 없음)
+          rm -rf /tmp/cdn && mkdir -p /tmp/cdn && cd /tmp/cdn
+          git init -q
+          git config user.email "actions@github.com"
+          git config user.name "github-actions"
+          git checkout -q -b cards-cdn
+          for ISSUE in $ISSUES; do
+            mkdir -p "$ISSUE"
+            cp "$WS/output/$ISSUE"/card-*.png "$ISSUE/"
+          done
+          git add -A
+          git commit -qm "cdn: 게시용 임시 이미지"
+          git push -qf "$REMOTE" cards-cdn
+          cd "$WS"
 
-          # 4) 인스타 게시 (이슈별) — 이슈 이름엔 공백이 없으므로 단어 분리로 순회
+          # 3) 인스타 게시 (이슈별; 실패하면 set -e 로 중단 → 4번 비우기 미실행 → 디버그/재시도 가능)
           for ISSUE in $ISSUES; do
             ENC=$(node -e "process.stdout.write(encodeURIComponent(process.argv[1]))" "$ISSUE")
             BASE="https://raw.githubusercontent.com/${REPO}/cards-cdn/${ENC}"
             echo "▶ 인스타 게시: $ISSUE"
             node post-instagram.mjs "output/$ISSUE" "$BASE"
           done
+
+          # 4) 업로드 완료 → cards-cdn 비우기 (GitHub 용량 절약; 인스타 게시물엔 영향 없음)
+          cd /tmp/cdn
+          git rm -rqf . >/dev/null 2>&1 || true
+          printf '%s\n' "인스타 업로드 완료 후 자동 비움 — 카드 이미지는 여기 보관하지 않습니다." > README.md
+          git add -A
+          git commit -qm "cdn: 업로드 완료 — 이미지 삭제"
+          git push -qf "$REMOTE" cards-cdn
+          echo "✅ 게시 + cards-cdn 비우기 완료"
