@@ -50,6 +50,21 @@ node render.mjs content/2026-W26-구독다이어트.json
 ## 디자인
 브랜드 색 `#1A73E8`(머니핏 앱 primary). 규격 1080×1350(인스타 4:5 캐러셀). 폰트 Pretendard/Apple SD Gothic Neo. 색·폰트·레이아웃은 `render.mjs` 상단 `STYLE` 에서 수정.
 
+## SNS 주간 지표 자동 수집 (SUS-230 / P-20)
+
+`.github/workflows/social-insights.yml` 이 **매주 월 09:00 KST** 에 직전 주(월~일) 인스타·스레드 지표를
+모아 `insights/YYYY-Www.json` 으로 커밋하고, 요약을 Actions 요약 패널(+Slack, 선택)에 남긴다.
+
+- 실행: `node scripts/collect-insights.mjs [--dry-run]` · 테스트: `node scripts/__tests__/collect-insights.test.mjs`
+- 접속키는 자동 게시용 `IG_ACCESS_TOKEN`·`THREADS_ACCESS_TOKEN` **재사용**(신규 권한 없음).
+  **Slack 은 선택** — `SLACK_WEBHOOK_MARKETING` 시크릿을 등록하면 요약이 Slack 으로도 간다(없으면 건너뜀).
+- 🔴 **수집 실패를 절대 0 으로 보고하지 않는다.** 실패한 채널은 `posts: null` + "⚠️ 수집 실패" 로 표시되고
+  잡이 빨간불로 끝난다. 접속키 만료를 조용히 지나치지 않기 위한 설계다(실패해도 그 주 파일은 보존).
+- ⚠️ **이 레포는 공개다.** `insights/*.json` · Actions 로그 · 요약 패널 모두 누구나 볼 수 있다.
+  개인정보는 담지 않지만(우리 계정 집계 수치 + 우리가 공개 게시한 문구 첫 줄만) **성과 수치는 공개된다.**
+- ⚠️ 공개 레포의 예약 워크플로는 레포에 60일간 활동이 없으면 GitHub 이 자동으로 끈다. 카드뉴스 발행이
+  멈추면 지표 수집도 조용히 멈추므로, 장기 미발행 시 Actions 탭에서 활성 상태를 확인할 것.
+
 ## 다운로드 링크 규칙 (SUS-230 / P-19 — 채널별 유입 계측)
 
 **캡션에 Play 스토어 URL 을 직접 쓰지 않는다.** 반드시 `moavant.com/mfAd/*` 리다이렉트를 거쳐야
