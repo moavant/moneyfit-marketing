@@ -8,7 +8,10 @@ import { join } from 'node:path';
 const TOKEN = process.env.THREADS_ACCESS_TOKEN;
 const GRAPH = 'https://graph.threads.net';
 const VER = 'v1.0';
-const DL_LINE = '다운로드 링크(Android) : https://moavant.com/mfAd'; // 스레드 본문 CTA(스레드는 링크가 클릭됨)
+// SUS-230(P-19): 채널별 유입 계측 — /mfAd/th 는 Play 설치 referrer 에 utm_source=threads 를 실어 보낸다.
+//   (moavant.com 리다이렉트에서 부여. 기존 /mfAd 도 계속 동작하므로 과거 게시물 링크는 무영향.)
+//   아래 99행의 `text.includes('moavant.com/mfAd')` 는 접두사 매칭이라 그대로 유효하다.
+const DL_LINE = '다운로드 링크(Android) : https://moavant.com/mfAd/th'; // 스레드 본문 CTA(스레드는 링크가 클릭됨)
 const LIMIT = 500;                          // 스레드 텍스트 글자 제한
 
 // 'Google Play 검색' CTA 줄을 다운로드 링크 줄로 치환 (+ 남은 '무료로 시작' CTA 줄 제거)
