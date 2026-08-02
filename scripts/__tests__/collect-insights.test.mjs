@@ -118,7 +118,9 @@ await t('buildReport: 지표 전건 미지원이면 0 이 아니라 null (0 과 
   const r = buildReport(range, { ok: true, listOk: true, media: [{ id: 'a', reach: null, saved: null }] }, null);
   assert.equal(r.instagram.reach, null);
   assert.equal(r.instagram.saved, null);
-  assert.equal(r.threads.posts, 0);
+  // th=null(수집 시도 안 함/실패) → posts 는 0 이 아니라 null 이어야 한다(H-1).
+  assert.equal(r.threads.posts, null);
+  assert.equal(r.threads.collected, false);
 });
 
 await t('buildReport: 일부만 측정되면 측정된 것만 합산', () => {
