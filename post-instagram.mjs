@@ -15,6 +15,27 @@ if (!dir || !baseUrl) { console.error('사용: node post-instagram.mjs <issueDir
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// SUS-230(P-19): 채널별 유입 계측.
+//   인스타 캡션은 URL 이 클릭되지 않으므로 링크를 본문에 넣지 않는다. 대신 프로필 링크
+//   (= moavant.com/mfAd/bio, Play 설치 referrer 에 utm_source=linkinbio)로 유도하는 한 줄을 보강한다.
+//   🔴 'Google Play 검색' CTA 는 제거하지 않는다 — Play 검색 유입이 2026-08-30 스토어 문안
+//   효과 측정의 판정 지표(DEC-126)이므로 없애면 측정 자체가 무너진다. 두 경로를 병행한다.
+//   (/mfAd/ig 는 스토리 링크 스티커·광고용으로 예약 — 자동 게시 경로에서는 쓰지 않는다.)
+const BIO_CTA = '📲 프로필 링크를 누르면 바로 설치할 수 있어요';
+const IG_CAPTION_LIMIT = 2200;
+
+// 해시태그 블록 바로 앞에 한 줄을 끼워 넣는다(해시태그가 없으면 맨 끝에 붙인다).
+function withBioCta(text = '') {
+  if (!text || /프로필 링크/.test(text)) return text;      // 이미 안내가 있으면 중복 금지
+  const lines = text.split('\n');
+  const tagAt = lines.findIndex((l) => /^\s*#/.test(l));
+  const block = tagAt === -1
+    ? [...lines, '', BIO_CTA]
+    : [...lines.slice(0, tagAt), BIO_CTA, '', ...lines.slice(tagAt)];
+  const out = block.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  return [...out].length <= IG_CAPTION_LIMIT ? out : text;  // 한도 초과 시 원문 유지
+}
+
 // access_token 은 항상 query/body 에만 넣고, 응답 본문만 출력한다(토큰 노출 방지).
 async function api(method, path, params = {}) {
   for (let attempt = 1; attempt <= 4; attempt++) {
@@ -89,6 +110,7 @@ console.log(`카드 ${urls.length}장`);
 // 3) 캡션(본문 + 해시태그)
 let caption = '';
 try { caption = readFileSync(join(dir, 'caption.txt'), 'utf-8').trim(); } catch { /* 캡션 없으면 빈 본문 */ }
+caption = withBioCta(caption); // SUS-230: 프로필 링크 유도 한 줄 보강(해시태그 앞)
 
 // 4) 첫 이미지가 공개로 뜰 때까지 대기
 await waitForUrl(urls[0]);
