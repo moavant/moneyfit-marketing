@@ -1,0 +1,97 @@
+{
+  "weekKey": "2026-W31",
+  "label": "7/27~8/2",
+  "rangeStartIso": "2026-07-26T15:00:00.000Z",
+  "rangeEndIso": "2026-08-02T15:00:00.000Z",
+  "collectedAtIso": "2026-08-03T02:37:07.918Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 225,
+    "posts": 3,
+    "reach": 24,
+    "views": 62,
+    "saved": 0,
+    "interactions": 11,
+    "truncated": false,
+    "media": [
+      {
+        "id": "17900471916475996",
+        "permalink": "https://www.instagram.com/p/Dbc6cOEIKoR/",
+        "timestamp": "2026-07-31T09:11:50+0000",
+        "title": "갑자기 큰 지출이 생겼을 때, 정말 '갑자기'였을까요? 🤔",
+        "reach": 8,
+        "views": 28,
+        "saved": 0,
+        "totalInteractions": 4
+      },
+      {
+        "id": "18219260305330003",
+        "permalink": "https://www.instagram.com/p/DbXw7GYFm0f/",
+        "timestamp": "2026-07-29T09:12:28+0000",
+        "title": "안 쓰는 날을 만드는 것만으로도 돈이 모입니다 💪",
+        "reach": 7,
+        "views": 13,
+        "saved": 0,
+        "totalInteractions": 4
+      },
+      {
+        "id": "18338537140251617",
+        "permalink": "https://www.instagram.com/p/DbSoAGQlvly/",
+        "timestamp": "2026-07-27T09:18:18+0000",
+        "title": "체크카드 쓸까, 신용카드 쓸까? 🤔",
+        "reach": 9,
+        "views": 21,
+        "saved": 0,
+        "totalInteractions": 3
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 12,
+    "posts": 3,
+    "views": 36,
+    "likes": 1,
+    "replies": 0,
+    "reposts": 0,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18084752138265659",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dbc6hiMoEqc",
+        "timestamp": "2026-07-31T09:12:36+0000",
+        "title": "매년 반복되는 비정기 지출, 사실 예측 가능합니다.",
+        "views": 18,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18023253674688565",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DbXxAXLloNk",
+        "timestamp": "2026-07-29T09:13:13+0000",
+        "title": "안 쓰는 날을 의도적으로 만들어보셨나요?",
+        "views": 9,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18169669231449451",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DbSoFGWFp9T",
+        "timestamp": "2026-07-27T09:19:01+0000",
+        "title": "체크카드 vs 신용카드, 어느 쪽이 내게 맞을까요?",
+        "views": 9,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
