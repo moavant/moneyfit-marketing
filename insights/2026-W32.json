@@ -1,0 +1,76 @@
+{
+  "weekKey": "2026-W32",
+  "label": "8/3~8/9",
+  "rangeStartIso": "2026-08-02T15:00:00.000Z",
+  "rangeEndIso": "2026-08-09T15:00:00.000Z",
+  "collectedAtIso": "2026-08-10T01:38:31.706Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 221,
+    "posts": 2,
+    "reach": 15,
+    "views": 53,
+    "saved": 0,
+    "interactions": 5,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18100373015165776",
+        "permalink": "https://www.instagram.com/p/Dbu8zC1FifP/",
+        "timestamp": "2026-08-07T09:18:45+0000",
+        "title": "월말이 되면 \"이번 달 왜 이렇게 썼지?\" 싶으신가요? 💸",
+        "reach": 8,
+        "views": 30,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18078428054326780",
+        "permalink": "https://www.instagram.com/p/DbkpVf9GwPV/",
+        "timestamp": "2026-08-03T09:16:18+0000",
+        "title": "월급이 통장에 들어오면 얼마나 모으고 있나요? 💰",
+        "reach": 7,
+        "views": 23,
+        "saved": 0,
+        "totalInteractions": 3
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 14,
+    "posts": 2,
+    "views": 13,
+    "likes": 0,
+    "replies": 0,
+    "reposts": 0,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18133073128616007",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dbu84GyFpQI",
+        "timestamp": "2026-08-07T09:19:29+0000",
+        "title": "월말이 되면 \"왜 이렇게 썼지?\" 싶으신가요?",
+        "views": 5,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18097915334628873",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DbkpasZmx3y",
+        "timestamp": "2026-08-03T09:17:02+0000",
+        "title": "월급이 들어오면 얼마나 모으고 있나요?",
+        "views": 8,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
