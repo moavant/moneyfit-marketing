@@ -1,0 +1,97 @@
+{
+  "weekKey": "2026-W33",
+  "label": "8/10~8/16",
+  "rangeStartIso": "2026-08-09T15:00:00.000Z",
+  "rangeEndIso": "2026-08-16T15:00:00.000Z",
+  "collectedAtIso": "2026-08-17T01:07:32.033Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 221,
+    "posts": 3,
+    "reach": 23,
+    "views": 63,
+    "saved": 0,
+    "interactions": 6,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18100108025213191",
+        "permalink": "https://www.instagram.com/p/DcBAcLtjZuR/",
+        "timestamp": "2026-08-14T09:36:55+0000",
+        "title": "대출이 여러 개라면, 어떤 순서로 갚아야 할까요? 💸",
+        "reach": 6,
+        "views": 15,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18130024537711713",
+        "permalink": "https://www.instagram.com/p/Db70M3hIAJ6/",
+        "timestamp": "2026-08-12T09:13:47+0000",
+        "title": "지출에 종류가 있다는 거 알고 계셨나요? 💡",
+        "reach": 8,
+        "views": 28,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "17941426368314869",
+        "permalink": "https://www.instagram.com/p/Db2rcA1llKg/",
+        "timestamp": "2026-08-10T09:20:59+0000",
+        "title": "카카오페이·토스·네이버페이, 다 합치면 얼마를 썼는지 아세요? 💳",
+        "reach": 9,
+        "views": 20,
+        "saved": 0,
+        "totalInteractions": 2
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 14,
+    "posts": 3,
+    "views": 66,
+    "likes": 0,
+    "replies": 0,
+    "reposts": 0,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18186720841396313",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcBAh6VDfzh",
+        "timestamp": "2026-08-14T09:37:44+0000",
+        "title": "대출이 여러 개라면, 어떤 순서로 갚아야 할까요?",
+        "views": 34,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17955747657214351",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Db70Ss-IPt7",
+        "timestamp": "2026-08-12T09:14:37+0000",
+        "title": "고정 vs 변동 지출, 구분하고 계세요?",
+        "views": 22,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18112252010065366",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Db2rhNpFgd-",
+        "timestamp": "2026-08-10T09:21:43+0000",
+        "title": "카카오페이·토스·네이버페이, 다 합치면 얼마 썼는지 아세요?",
+        "views": 10,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
