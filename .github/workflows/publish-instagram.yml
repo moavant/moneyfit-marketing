@@ -120,8 +120,8 @@ jobs:
             fi
             if [ "$PLATFORM" != "instagram" ]; then
               if [ -n "${THREADS_ACCESS_TOKEN:-}" ]; then
-                echo "▶ 스레드 게시: $ISSUE"
-                node post-threads.mjs "output/$ISSUE" "$BASE"
+                echo "▶ 스레드 게시(텍스트 전용): $ISSUE"
+                node post-threads.mjs "output/$ISSUE"
               else
                 echo "ℹ️ THREADS_ACCESS_TOKEN 미설정 — 스레드 게시 건너뜀"
               fi
