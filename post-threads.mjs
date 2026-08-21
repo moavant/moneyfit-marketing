@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-// 스레드(Threads) 자동 게시 — 카드(card-*.png) + caption-threads.txt(+다운로드 링크) → 캐러셀/단일/텍스트 게시
-// 사용: node post-threads.mjs <output/<issue> 디렉터리> <이미지 공개 base URL>
+// 스레드(Threads) 자동 게시 — caption-threads.txt(+다운로드 링크) → 텍스트 전용 게시
+// 🔴 스레드는 카드 이미지를 첨부하지 않는다(의도적). 이미지 캐러셀은 인스타 전용 —
+//    같은 정보라도 스레드 문화(반말, 참여 유도)에 맞춰 텍스트로 재구성해 올린다.
+// 사용: node post-threads.mjs <output/<issue> 디렉터리> [이미지 공개 base URL — 더 이상 사용 안 함, 호출부 호환용]
 // 환경변수: THREADS_ACCESS_TOKEN (필수) — 절대 로그에 출력하지 않는다.
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const TOKEN = process.env.THREADS_ACCESS_TOKEN;
@@ -10,7 +12,7 @@ const GRAPH = 'https://graph.threads.net';
 const VER = 'v1.0';
 // SUS-230(P-19): 채널별 유입 계측 — /mfAd/th 는 Play 설치 referrer 에 utm_source=threads 를 실어 보낸다.
 //   (moavant.com 리다이렉트에서 부여. 기존 /mfAd 도 계속 동작하므로 과거 게시물 링크는 무영향.)
-//   아래 99행의 `text.includes('moavant.com/mfAd')` 는 접두사 매칭이라 그대로 유효하다.
+//   아래 `text.includes('moavant.com/mfAd')` 는 접두사 매칭이라 그대로 유효하다.
 const DL_LINE = '다운로드 링크(Android) : https://moavant.com/mfAd/th'; // 스레드 본문 CTA(스레드는 링크가 클릭됨)
 const LIMIT = 500;                          // 스레드 텍스트 글자 제한
 
@@ -30,9 +32,9 @@ function stripHashtags(t = '') {
   return t.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-const [dir, baseUrl] = process.argv.slice(2);
+const [dir] = process.argv.slice(2);
 if (!TOKEN) { console.error('✗ THREADS_ACCESS_TOKEN 환경변수가 없습니다.'); process.exit(1); }
-if (!dir || !baseUrl) { console.error('사용: node post-threads.mjs <issueDir> <baseUrl>'); process.exit(1); }
+if (!dir) { console.error('사용: node post-threads.mjs <issueDir>'); process.exit(1); }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -65,19 +67,7 @@ async function api(method, path, params = {}) {
   }
 }
 
-async function waitForUrl(u, maxMs = 90000) {
-  const start = Date.now();
-  while (Date.now() - start < maxMs) {
-    try {
-      const r = await fetch(u, { method: 'GET' });
-      if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) return;
-    } catch { /* 재시도 */ }
-    await sleep(3000);
-  }
-  throw new Error(`이미지 공개 URL이 뜨지 않습니다: ${u}`);
-}
-
-// 스레드 컨테이너는 게시 전 처리 시간이 필요(특히 캐러셀) — 상태가 FINISHED 될 때까지 대기
+// 스레드 컨테이너는 게시 전 처리 시간이 필요 — 상태가 FINISHED 될 때까지 대기
 async function waitReady(creationId, maxMs = 120000) {
   const start = Date.now();
   await sleep(5000);
@@ -107,36 +97,12 @@ if ([...text].length > LIMIT) {   // 거의 안 일어나지만 안전장치: �
   text = `${[...body].slice(0, Math.max(0, room - 1)).join('').trimEnd()}…\n\n${DL_LINE}`;
 }
 
-// 3) 카드 이미지
-const cards = readdirSync(dir).filter((f) => /^card-\d+\.png$/.test(f)).sort();
-const urls = cards.map((f) => `${baseUrl}/${f}`);
-console.log(`카드 ${urls.length}장`);
+// 3) 컨테이너 생성 — 항상 텍스트 전용(이미지 미첨부)
+console.log('이미지 첨부 없음 — 텍스트 전용 게시');
+const c = await api('POST', `${UID}/threads`, { media_type: 'TEXT', text });
+const creationId = c.id;
 
-// 4) 컨테이너 생성
-let creationId;
-if (urls.length === 0) {
-  // 텍스트 전용
-  const c = await api('POST', `${UID}/threads`, { media_type: 'TEXT', text });
-  creationId = c.id;
-} else if (urls.length === 1) {
-  await waitForUrl(urls[0]);
-  const c = await api('POST', `${UID}/threads`, { media_type: 'IMAGE', image_url: urls[0], text });
-  creationId = c.id;
-} else {
-  await waitForUrl(urls[0]);
-  const children = [];
-  for (const u of urls) {
-    const item = await api('POST', `${UID}/threads`, { media_type: 'IMAGE', image_url: u, is_carousel_item: 'true' });
-    children.push(item.id);
-    console.log(`  · 캐러셀 아이템 ${children.length}/${urls.length}`);
-  }
-  // 스레드는 각 아이템이 처리완료(FINISHED) 돼야 캐러셀에 묶을 수 있다
-  for (const id of children) await waitReady(id);
-  const car = await api('POST', `${UID}/threads`, { media_type: 'CAROUSEL', children: children.join(','), text });
-  creationId = car.id;
-}
-
-// 5) 처리 완료 대기 후 게시
+// 4) 처리 완료 대기 후 게시
 await waitReady(creationId);
 const pub = await api('POST', `${UID}/threads_publish`, { creation_id: creationId });
 console.log(`✅ 스레드 게시 완료! id: ${pub.id}`);
