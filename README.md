@@ -132,12 +132,43 @@ Google Play에서 '머니핏 가계부' 검색
     이번 버전 범위 밖 — 필요해지면 별도로 확장한다.
 
 **필요한 설정(직접 해야 함 — 자동화 불가):**
-1. **`ANTHROPIC_API_KEY` 시크릿 신규 등록** — Claude API 키. 저장소 Settings → Secrets and
-   variables → Actions 에서 추가.
-2. **`THREADS_ACCESS_TOKEN`에 `threads_manage_replies` 스코프 필요.** 기존 토큰(자동 게시용)이
-   이 스코프 없이 발급됐다면 답글 조회·게시가 403 으로 막힌다. Meta 앱에서 해당 스코프를 포함해
-   재인가(재로그인)한 뒤 새 토큰으로 시크릿을 교체할 것 — `refresh-ig-token.yml` 은 만료만 늦출 뿐
-   스코프를 추가해주지 않는다.
+
+### 1. `ANTHROPIC_API_KEY` 시크릿 등록
+1. [console.anthropic.com](https://console.anthropic.com) → **API Keys** → **Create Key**로 키 발급.
+2. 이 저장소 **Settings → Secrets and variables → Actions → New repository secret**.
+   Name: `ANTHROPIC_API_KEY`, Value: 방금 발급한 키.
+
+### 2. `THREADS_ACCESS_TOKEN` 재발급 (스코프 추가)
+기존 토큰(자동 게시용)은 `threads_basic`·`threads_content_publish` 스코프로만 발급됐을 가능성이
+높다. 답글을 **읽으려면 `threads_read_replies`**, **답글을 달려면 `threads_manage_replies`** 가
+추가로 필요하다 — 둘 다 없으면 403 으로 막힌다. `refresh-ig-token.yml` 은 만료만 늦출 뿐 스코프를
+추가해주지 않으므로, 아래 재인가를 **한 번만** 수동으로 해줘야 한다.
+
+1. **인가 URL을 브라우저로 연다** (기존 Meta 앱의 `CLIENT_ID`·`REDIRECT_URI`를 그대로 쓰되, `scope`에
+   기존 스코프 + 새 스코프를 모두 콤마로 나열):
+   ```
+   https://threads.net/oauth/authorize?client_id=<CLIENT_ID>&redirect_uri=<REDIRECT_URI>&scope=threads_basic,threads_content_publish,threads_read_replies,threads_manage_replies&response_type=code
+   ```
+   로그인·권한 승인 후 `REDIRECT_URI?code=...` 로 리다이렉트된다 — 이 `code` 값을 복사.
+2. **`code` → 단기 토큰 교환** (1시간 유효):
+   ```bash
+   curl -X POST https://graph.threads.net/oauth/access_token \
+     -F client_id=<CLIENT_ID> \
+     -F client_secret=<CLIENT_SECRET> \
+     -F grant_type=authorization_code \
+     -F redirect_uri=<REDIRECT_URI> \
+     -F code=<위에서 받은 code>
+   ```
+3. **단기 토큰 → 장기 토큰 교환** (60일 유효 — 이게 실제로 쓸 값):
+   ```bash
+   curl -i -X GET "https://graph.threads.net/access_token?grant_type=th_exchange_token&client_secret=<CLIENT_SECRET>&access_token=<단기 토큰>"
+   ```
+4. 응답의 `access_token` 값을 저장소 **Settings → Secrets and variables → Actions**에서
+   기존 `THREADS_ACCESS_TOKEN` 시크릿의 **Update**로 교체. 이후엔 `refresh-ig-token.yml`이 매월
+   자동으로 만료 전 갱신해준다(스코프는 그대로 유지됨).
+
+> `CLIENT_ID`·`CLIENT_SECRET`·`REDIRECT_URI`는 [developers.facebook.com/apps](https://developers.facebook.com/apps) 의
+> 기존 앱 → Threads 제품 설정에서 확인 가능(원래 토큰 발급 때 썼던 값 그대로 재사용).
 
 **동작 방식**: `GET me/threads`(최근 `REPLY_LOOKBACK_DAYS`일, 기본 30일) 로 답글 달린 우리 게시물을
 찾고 → 게시물별 `GET {id}/replies` 로 답글 목록을 가져와 → 상태 파일에 없고 우리 계정 자신이 아니며

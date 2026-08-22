@@ -4,9 +4,10 @@
 // 실행: node scripts/reply-comments.mjs [--dry-run]
 // 환경변수:
 //   THREADS_ACCESS_TOKEN   스레드 Graph 토큰 — 기존 자동 게시용 토큰 재사용.
-//                          🔴 threads_manage_replies 스코프가 없으면 답글 조회·게시가 403 으로 막힌다.
-//                          기존 토큰에 이 스코프가 없다면 Meta 앱에서 재인가(재로그인)해서 다시 발급받아야
-//                          한다 — refresh-ig-token.yml 은 만료만 늦출 뿐 스코프를 추가하지 않는다.
+//                          🔴 threads_read_replies(조회) + threads_manage_replies(게시) 스코프가
+//                          둘 다 없으면 403 으로 막힌다. 기존 토큰에 없다면 Meta 앱에서 두 스코프를
+//                          포함해 재인가해서 다시 발급받아야 한다(README "스레드 댓글 자동응답" 참고)
+//                          — refresh-ig-token.yml 은 만료만 늦출 뿐 스코프를 추가하지 않는다.
 //   ANTHROPIC_API_KEY      Claude API 키 — 답글 생성/스킵 판단에 사용.
 //   ANTHROPIC_MODEL        (선택) 기본 claude-opus-5.
 //   REPLY_LOOKBACK_DAYS    (선택) 답글을 확인할 우리 게시물 범위(기본 30일).
@@ -231,7 +232,7 @@ async function main() {
   const client = new Anthropic();
 
   const me = await api.get('me', { fields: 'id,username' });
-  if (!me?.id) throw new Error('스레드 사용자 ID를 가져오지 못했습니다(토큰 권한 확인 — threads_manage_replies 스코프 필요).');
+  if (!me?.id) throw new Error('스레드 사용자 ID를 가져오지 못했습니다(토큰 권한 확인 — threads_read_replies·threads_manage_replies 스코프 필요).');
   console.log(`스레드 계정: @${me.username || '?'} (id ${me.id})`);
 
   const since = Date.now() - LOOKBACK_DAYS * 86400000;

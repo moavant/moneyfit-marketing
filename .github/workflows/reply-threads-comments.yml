@@ -6,8 +6,8 @@ name: 스레드 댓글 자동응답
 # 🔴 완전 자동 게시(사람 승인 없음)로 운영하기로 결정했다 — 브랜드 리스크는
 #    scripts/reply-comments.mjs 의 상태 파일(중복 방지) + 스킵 판단(스팸·욕설·무관 필터링) +
 #    1회 실행당 게시 상한으로 최소화한다. 자세한 내용은 README "스레드 댓글 자동응답" 참고.
-# 🔴 시크릿: THREADS_ACCESS_TOKEN(threads_manage_replies 스코프 필요 — 기존 토큰에 없으면
-#    Meta 앱 재인가 필요) + ANTHROPIC_API_KEY(신규 등록 필요).
+# 🔴 시크릿: THREADS_ACCESS_TOKEN(threads_read_replies + threads_manage_replies 스코프 필요 —
+#    기존 토큰에 없으면 Meta 앱 재인가 필요) + ANTHROPIC_API_KEY(신규 등록 필요).
 # ⚠️ 이 레포는 공개다. Actions 로그·Job Summary·state/ 커밋은 누구나 볼 수 있다
 #    (개인정보는 없고, 우리 계정이 이미 공개 게시한 답글 요약과 처리 시각만 담긴다).
 on:
