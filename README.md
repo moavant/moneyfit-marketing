@@ -10,7 +10,10 @@ content/   주차별 카드뉴스 내용 (JSON, 텍스트 — 가벼움)
 render.mjs HTML/CSS → 1080×1350 PNG 카드 렌더러 (Playwright)
 templates/ (선택) 별도 템플릿 파일
 output/    렌더 결과 PNG (깃 제외, 자동 생성)
-.github/workflows/render.yml  content 추가 시 자동 렌더 → 아티팩트 업로드
+state/     스레드 댓글 자동응답 처리 기록 (JSON — 자동 생성, 아래 참고)
+.github/workflows/render.yml                content 추가 시 자동 렌더 → 아티팩트 업로드
+.github/workflows/publish-instagram.yml     인스타·스레드 자동 게시
+.github/workflows/reply-threads-comments.yml 스레드 댓글 자동응답(15분마다)
 ```
 
 ## 카드뉴스 만드는 법
@@ -109,6 +112,71 @@ Google Play에서 '머니핏 가계부' 검색
 
 #통신비 #고정비절약 #머니핏
 ```
+
+## 스레드 댓글 자동응답
+
+`.github/workflows/reply-threads-comments.yml` 이 **15분마다** 우리 스레드 게시물에 달린 새 답글을
+확인해, Claude로 위 브랜드 보이스(반말)에 맞는 대댓글을 만들어 **사람 승인 없이 바로 게시**한다.
+실행 파일은 `scripts/reply-comments.mjs`.
+
+- 🔴 **완전 자동 게시로 운영하기로 결정했다** — 답글 초안을 사람이 승인하는 단계는 없다. 대신
+  브랜드 리스크를 아래로 최소화한다:
+  - **중복 방지**: 처리한(응답했거나 스킵한) 답글 id 를 `state/threads-replies.json` 에 남겨
+    같은 답글에 두 번 응답하지 않는다. 60일 지난 기록은 자동 정리.
+  - **스킵 판단**: 스팸·욕설·혐오·명백한 광고·게시물과 무관한 내용은 Claude가 판단해 응답하지
+    않는다(브랜드 보이스 프롬프트는 `scripts/reply-comments.mjs`의 `SYSTEM_PROMPT` 참고).
+  - **답글에는 CTA·링크를 넣지 않는다** — 매 답글마다 다운로드 유도를 넣으면 봇처럼 보이고
+    광고 남발이 된다. 머니핏 언급은 자연스러운 맥락일 때만 아주 짧게, 선택적으로.
+  - **1회 실행 게시 상한**(`REPLY_MAX_PER_RUN`, 기본 20건) — 버그로 인한 폭주를 막는 안전장치.
+  - **응답 대상은 우리 게시물의 1단계(직접) 답글까지만.** 답글에 달린 답글(2단계 이상)은
+    이번 버전 범위 밖 — 필요해지면 별도로 확장한다.
+
+**필요한 설정(직접 해야 함 — 자동화 불가):**
+
+### 1. `ANTHROPIC_API_KEY` 시크릿 등록
+1. [console.anthropic.com](https://console.anthropic.com) → **API Keys** → **Create Key**로 키 발급.
+2. 이 저장소 **Settings → Secrets and variables → Actions → New repository secret**.
+   Name: `ANTHROPIC_API_KEY`, Value: 방금 발급한 키.
+
+### 2. `THREADS_ACCESS_TOKEN` 재발급 (스코프 추가)
+기존 토큰(자동 게시용)은 `threads_basic`·`threads_content_publish` 스코프로만 발급됐을 가능성이
+높다. 답글을 **읽으려면 `threads_read_replies`**, **답글을 달려면 `threads_manage_replies`** 가
+추가로 필요하다 — 둘 다 없으면 403 으로 막힌다. `refresh-ig-token.yml` 은 만료만 늦출 뿐 스코프를
+추가해주지 않으므로, 아래 재인가를 **한 번만** 수동으로 해줘야 한다.
+
+1. **인가 URL을 브라우저로 연다** (기존 Meta 앱의 `CLIENT_ID`·`REDIRECT_URI`를 그대로 쓰되, `scope`에
+   기존 스코프 + 새 스코프를 모두 콤마로 나열):
+   ```
+   https://threads.net/oauth/authorize?client_id=<CLIENT_ID>&redirect_uri=<REDIRECT_URI>&scope=threads_basic,threads_content_publish,threads_read_replies,threads_manage_replies&response_type=code
+   ```
+   로그인·권한 승인 후 `REDIRECT_URI?code=...` 로 리다이렉트된다 — 이 `code` 값을 복사.
+2. **`code` → 단기 토큰 교환** (1시간 유효):
+   ```bash
+   curl -X POST https://graph.threads.net/oauth/access_token \
+     -F client_id=<CLIENT_ID> \
+     -F client_secret=<CLIENT_SECRET> \
+     -F grant_type=authorization_code \
+     -F redirect_uri=<REDIRECT_URI> \
+     -F code=<위에서 받은 code>
+   ```
+3. **단기 토큰 → 장기 토큰 교환** (60일 유효 — 이게 실제로 쓸 값):
+   ```bash
+   curl -i -X GET "https://graph.threads.net/access_token?grant_type=th_exchange_token&client_secret=<CLIENT_SECRET>&access_token=<단기 토큰>"
+   ```
+4. 응답의 `access_token` 값을 저장소 **Settings → Secrets and variables → Actions**에서
+   기존 `THREADS_ACCESS_TOKEN` 시크릿의 **Update**로 교체. 이후엔 `refresh-ig-token.yml`이 매월
+   자동으로 만료 전 갱신해준다(스코프는 그대로 유지됨).
+
+> `CLIENT_ID`·`CLIENT_SECRET`·`REDIRECT_URI`는 [developers.facebook.com/apps](https://developers.facebook.com/apps) 의
+> 기존 앱 → Threads 제품 설정에서 확인 가능(원래 토큰 발급 때 썼던 값 그대로 재사용).
+
+**동작 방식**: `GET me/threads`(최근 `REPLY_LOOKBACK_DAYS`일, 기본 30일) 로 답글 달린 우리 게시물을
+찾고 → 게시물별 `GET {id}/replies` 로 답글 목록을 가져와 → 상태 파일에 없고 우리 계정 자신이 아니며
+숨김 처리되지 않은 답글만 → Claude(`claude-opus-5`, structured output)에 판단을 맡겨 → `reply`면
+`reply_to_id` 로 답글 컨테이너를 만들어 게시하고, `skip`이면 사유와 함께 상태 파일에만 기록한다.
+
+**수동 확인**: Actions 탭 → "스레드 댓글 자동응답" → Run workflow → `dry_run: true` 로 실행하면
+실제 게시·상태 저장 없이 판단 로그만 볼 수 있다.
 
 ## 디자인
 브랜드 색 `#1A73E8`(머니핏 앱 primary). 규격 1080×1350(인스타 4:5 캐러셀). 폰트 Pretendard/Apple SD Gothic Neo. 색·폰트·레이아웃은 `render.mjs` 상단 `STYLE` 에서 수정.
