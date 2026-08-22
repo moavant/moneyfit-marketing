@@ -10,7 +10,10 @@ content/   주차별 카드뉴스 내용 (JSON, 텍스트 — 가벼움)
 render.mjs HTML/CSS → 1080×1350 PNG 카드 렌더러 (Playwright)
 templates/ (선택) 별도 템플릿 파일
 output/    렌더 결과 PNG (깃 제외, 자동 생성)
-.github/workflows/render.yml  content 추가 시 자동 렌더 → 아티팩트 업로드
+state/     스레드 댓글 자동응답 처리 기록 (JSON — 자동 생성, 아래 참고)
+.github/workflows/render.yml                content 추가 시 자동 렌더 → 아티팩트 업로드
+.github/workflows/publish-instagram.yml     인스타·스레드 자동 게시
+.github/workflows/reply-threads-comments.yml 스레드 댓글 자동응답(15분마다)
 ```
 
 ## 카드뉴스 만드는 법
@@ -109,6 +112,40 @@ Google Play에서 '머니핏 가계부' 검색
 
 #통신비 #고정비절약 #머니핏
 ```
+
+## 스레드 댓글 자동응답
+
+`.github/workflows/reply-threads-comments.yml` 이 **15분마다** 우리 스레드 게시물에 달린 새 답글을
+확인해, Claude로 위 브랜드 보이스(반말)에 맞는 대댓글을 만들어 **사람 승인 없이 바로 게시**한다.
+실행 파일은 `scripts/reply-comments.mjs`.
+
+- 🔴 **완전 자동 게시로 운영하기로 결정했다** — 답글 초안을 사람이 승인하는 단계는 없다. 대신
+  브랜드 리스크를 아래로 최소화한다:
+  - **중복 방지**: 처리한(응답했거나 스킵한) 답글 id 를 `state/threads-replies.json` 에 남겨
+    같은 답글에 두 번 응답하지 않는다. 60일 지난 기록은 자동 정리.
+  - **스킵 판단**: 스팸·욕설·혐오·명백한 광고·게시물과 무관한 내용은 Claude가 판단해 응답하지
+    않는다(브랜드 보이스 프롬프트는 `scripts/reply-comments.mjs`의 `SYSTEM_PROMPT` 참고).
+  - **답글에는 CTA·링크를 넣지 않는다** — 매 답글마다 다운로드 유도를 넣으면 봇처럼 보이고
+    광고 남발이 된다. 머니핏 언급은 자연스러운 맥락일 때만 아주 짧게, 선택적으로.
+  - **1회 실행 게시 상한**(`REPLY_MAX_PER_RUN`, 기본 20건) — 버그로 인한 폭주를 막는 안전장치.
+  - **응답 대상은 우리 게시물의 1단계(직접) 답글까지만.** 답글에 달린 답글(2단계 이상)은
+    이번 버전 범위 밖 — 필요해지면 별도로 확장한다.
+
+**필요한 설정(직접 해야 함 — 자동화 불가):**
+1. **`ANTHROPIC_API_KEY` 시크릿 신규 등록** — Claude API 키. 저장소 Settings → Secrets and
+   variables → Actions 에서 추가.
+2. **`THREADS_ACCESS_TOKEN`에 `threads_manage_replies` 스코프 필요.** 기존 토큰(자동 게시용)이
+   이 스코프 없이 발급됐다면 답글 조회·게시가 403 으로 막힌다. Meta 앱에서 해당 스코프를 포함해
+   재인가(재로그인)한 뒤 새 토큰으로 시크릿을 교체할 것 — `refresh-ig-token.yml` 은 만료만 늦출 뿐
+   스코프를 추가해주지 않는다.
+
+**동작 방식**: `GET me/threads`(최근 `REPLY_LOOKBACK_DAYS`일, 기본 30일) 로 답글 달린 우리 게시물을
+찾고 → 게시물별 `GET {id}/replies` 로 답글 목록을 가져와 → 상태 파일에 없고 우리 계정 자신이 아니며
+숨김 처리되지 않은 답글만 → Claude(`claude-opus-5`, structured output)에 판단을 맡겨 → `reply`면
+`reply_to_id` 로 답글 컨테이너를 만들어 게시하고, `skip`이면 사유와 함께 상태 파일에만 기록한다.
+
+**수동 확인**: Actions 탭 → "스레드 댓글 자동응답" → Run workflow → `dry_run: true` 로 실행하면
+실제 게시·상태 저장 없이 판단 로그만 볼 수 있다.
 
 ## 디자인
 브랜드 색 `#1A73E8`(머니핏 앱 primary). 규격 1080×1350(인스타 4:5 캐러셀). 폰트 Pretendard/Apple SD Gothic Neo. 색·폰트·레이아웃은 `render.mjs` 상단 `STYLE` 에서 수정.
