@@ -16,14 +16,9 @@ const VER = 'v1.0';
 const DL_LINE = '다운로드 링크(Android) : https://moavant.com/mfAd/th'; // 스레드 본문 CTA(스레드는 링크가 클릭됨)
 const LIMIT = 500;                          // 스레드 텍스트 글자 제한
 
-// 'Google Play 검색' CTA 줄을 다운로드 링크 줄로 치환 (+ 남은 '무료로 시작' CTA 줄 제거)
+// 'Google Play 검색' CTA 줄 및 '무료로 시작' 줄 제거 (다운로드 링크는 붙이지 않음)
 function replaceStoreCTA(t = '') {
-  let done = false;
-  let lines = t.split('\n').map((l) => {
-    if (!done && /Google\s*Play/i.test(l)) { done = true; return DL_LINE; }
-    return l;
-  });
-  lines = lines.filter((l) => l === DL_LINE || !/무료로\s*시작/.test(l));
+  const lines = t.split('\n').filter((l) => !/Google\s*Play/i.test(l) && !/무료로\s*시작/.test(l));
   return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
@@ -90,11 +85,8 @@ console.log(`스레드 계정: @${me.username || '?'} (id ${UID})`);
 let cap = '';
 try { cap = readFileSync(join(dir, 'caption-threads.txt'), 'utf-8').trim(); } catch { /* 없으면 링크만 */ }
 let text = stripHashtags(replaceStoreCTA(cap));
-if (!text.includes('moavant.com/mfAd')) text = (text ? `${text}\n\n` : '') + DL_LINE; // CTA 없던 경우 링크 보강
-if ([...text].length > LIMIT) {   // 거의 안 일어나지만 안전장치: 본문만 축약, 링크는 보존
-  const body = text.replace(DL_LINE, '').trim();
-  const room = LIMIT - DL_LINE.length - 2;
-  text = `${[...body].slice(0, Math.max(0, room - 1)).join('').trimEnd()}…\n\n${DL_LINE}`;
+if ([...text].length > LIMIT) {   // 거의 안 일어나지만 안전장치: 500자 초과 시 말줄임 처리
+  text = `${[...text].slice(0, LIMIT - 1).join('').trimEnd()}…`;
 }
 
 // 3) 컨테이너 생성 — 항상 텍스트 전용(이미지 미첨부)
