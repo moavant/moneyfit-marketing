@@ -1,7 +1,9 @@
-name: 인스타·스레드 자동 게시
+name: 인스타 카드뉴스 자동 게시
 
 # content/ 에 새 카드뉴스 JSON 이 main 에 올라오면 → 렌더 → 이미지 공개(cards-cdn) → 인스타 캐러셀 자동 게시.
 # 수동 실행(workflow_dispatch) 시 특정 파일 하나만 게시할 수 있다(첫 테스트용).
+# 🔴 2026-08-24 채널 분리 — 카드뉴스는 인스타 전용. 스레드는 threads/posts/** +
+#    publish-threads.yml(참여형 텍스트, 별도 클라우드 루틴)이 담당한다. 여기서 스레드에 올리지 않는다.
 on:
   push:
     branches: [main]
@@ -12,12 +14,6 @@ on:
       issue:
         description: '게시할 content 파일 경로 (예: content/2026-W26-구독다이어트.json). 비우면 이번 푸시의 신규 추가분.'
         required: false
-      platform:
-        description: '게시 대상 (both / instagram / threads)'
-        required: false
-        default: 'both'
-        type: choice
-        options: [both, instagram, threads]
 
 permissions:
   contents: write
@@ -74,11 +70,9 @@ jobs:
         if: steps.target.outputs.files != ''
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           FILES: ${{ steps.target.outputs.files }}
-          PLATFORM: ${{ github.event.inputs.platform || 'both' }}
         run: |
           set -euo pipefail
           REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
@@ -110,22 +104,12 @@ jobs:
           git push -qf "$REMOTE" cards-cdn
           cd "$WS"
 
-          # 3) 인스타 + 스레드 게시 (이슈별; 실패하면 set -e 로 중단 → 4번 비우기 미실행 → 디버그/재시도 가능)
+          # 3) 인스타 게시 (이슈별; 실패하면 set -e 로 중단 → 4번 비우기 미실행 → 디버그/재시도 가능)
           for ISSUE in $ISSUES; do
             ENC=$(node -e "process.stdout.write(encodeURIComponent(process.argv[1]))" "$ISSUE")
             BASE="https://raw.githubusercontent.com/${REPO}/cards-cdn/${ENC}"
-            if [ "$PLATFORM" != "threads" ]; then
-              echo "▶ 인스타 게시: $ISSUE"
-              node post-instagram.mjs "output/$ISSUE" "$BASE"
-            fi
-            if [ "$PLATFORM" != "instagram" ]; then
-              if [ -n "${THREADS_ACCESS_TOKEN:-}" ]; then
-                echo "▶ 스레드 게시(텍스트 전용): $ISSUE"
-                node post-threads.mjs "output/$ISSUE"
-              else
-                echo "ℹ️ THREADS_ACCESS_TOKEN 미설정 — 스레드 게시 건너뜀"
-              fi
-            fi
+            echo "▶ 인스타 게시: $ISSUE"
+            node post-instagram.mjs "output/$ISSUE" "$BASE"
           done
 
           # 4) 업로드 완료 → cards-cdn 비우기 (GitHub 용량 절약; 인스타 게시물엔 영향 없음)
