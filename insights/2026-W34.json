@@ -1,0 +1,128 @@
+{
+  "weekKey": "2026-W34",
+  "label": "8/17~8/23",
+  "rangeStartIso": "2026-08-16T15:00:00.000Z",
+  "rangeEndIso": "2026-08-23T15:00:00.000Z",
+  "collectedAtIso": "2026-08-24T01:09:10.687Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 247,
+    "posts": 5,
+    "reach": 55,
+    "views": 129,
+    "saved": 0,
+    "interactions": 13,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18147031117548193",
+        "permalink": "https://www.instagram.com/p/DcS_XYzFvQl/",
+        "timestamp": "2026-08-21T09:13:51+0000",
+        "title": "추석이 한 달 앞으로 다가왔어요. 준비하셨나요? 🎑",
+        "reach": 8,
+        "views": 17,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18139358776554099",
+        "permalink": "https://www.instagram.com/p/DcN2FR3G20r/",
+        "timestamp": "2026-08-19T09:16:32+0000",
+        "title": "여름 휴가, 카드 긁다 보면 나중에 얼마 썼는지 잘 모르죠? 💸",
+        "reach": 13,
+        "views": 27,
+        "saved": 0,
+        "totalInteractions": 3
+      },
+      {
+        "id": "18021419261914287",
+        "permalink": "https://www.instagram.com/p/DcNxAeLlrHt/",
+        "timestamp": "2026-08-19T08:32:11+0000",
+        "title": "매달 나가는 휴대폰 요금, 마지막으로 점검한 게 언제인가요? 📱",
+        "reach": 14,
+        "views": 30,
+        "saved": 0,
+        "totalInteractions": 3
+      },
+      {
+        "id": "18142871629561323",
+        "permalink": "https://www.instagram.com/p/DcI1bgwFvts/",
+        "timestamp": "2026-08-17T10:34:38+0000",
+        "title": "연금저축, 납입하면 세금을 돌려받는다는 거 알고 계셨나요? 💰",
+        "reach": 14,
+        "views": 40,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18127308040786270",
+        "permalink": "https://www.instagram.com/p/DcIm_LKmzA0/",
+        "timestamp": "2026-08-17T08:28:26+0000",
+        "title": "월급을 50:30:20으로 나누라는 말, 내 지출에는 안 맞던 적 있으신",
+        "reach": 6,
+        "views": 15,
+        "saved": 0,
+        "totalInteractions": 3
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 14,
+    "posts": 4,
+    "views": 109,
+    "likes": 3,
+    "replies": 0,
+    "reposts": 0,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18148059706541587",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcS_cmmliuU",
+        "timestamp": "2026-08-21T09:14:35+0000",
+        "title": "추석이 한 달 앞인데 명절 예산 잡으셨어요?",
+        "views": 17,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18013395704931319",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcOQLoaGgLg",
+        "timestamp": "2026-08-19T13:04:30+0000",
+        "title": "다들 구독료 얼마나 쓰고 있어?",
+        "views": 16,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18329421166257968",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcN2KSUm-Kb",
+        "timestamp": "2026-08-19T09:17:15+0000",
+        "title": "이번 여름 휴가에 얼마 썼어?",
+        "views": 18,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18147159124554217",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcI1g9nFqvT",
+        "timestamp": "2026-08-17T10:35:25+0000",
+        "title": "연금저축 세액공제 한도 알고 있어?",
+        "views": 58,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
