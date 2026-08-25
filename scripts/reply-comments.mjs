@@ -143,6 +143,12 @@ export function filterRepliesToProcess(replies, state, myUsername) {
   });
 }
 
+// 이 답글 밑에 이미 우리 계정(수기 포함) 답글이 달려있는지 확인한다 — 사장님이 앱에서
+// 직접 먼저 답글을 단 경우, 자동응답이 또 답글을 달아 중복되는 걸 막기 위함.
+export function hasOwnReply(children, myUsername) {
+  return (children || []).some((c) => c?.username === myUsername);
+}
+
 // 코드포인트 단위로 안전하게 자른다(모델 출력 길이를 절대 그대로 믿지 않는다).
 export function enforceLength(text, limit = REPLY_LIMIT) {
   const s = String(text ?? '').trim();
@@ -253,7 +259,7 @@ async function main() {
   outer:
   for (const post of targets) {
     const { rows: replies, truncated: repliesTruncated } = await paginate(
-      api, `${post.id}/replies`, { fields: 'id,text,username,timestamp,hide_status' }, 2,
+      api, `${post.id}/replies`, { fields: 'id,text,username,timestamp,hide_status,has_replies' }, 2,
     );
     if (repliesTruncated) console.error(`  · (경고) 게시물 ${post.id} 답글이 페이지 상한에서 잘림`);
 
@@ -276,6 +282,16 @@ async function main() {
         console.error(`  · (경고) 1회 실행 게시 상한(${MAX_PER_RUN}건) 도달 — 나머지는 다음 회차로 미룸`);
         break outer;
       }
+      if (reply.has_replies) {
+        const { rows: children } = await paginate(api, `${reply.id}/replies`, { fields: 'id,username' }, 1);
+        if (hasOwnReply(children, me.username)) {
+          console.log(`  · 스킵(수기 답변 있음) @${reply.username}`);
+          skippedCount++;
+          if (!dryRun) { state.processed[reply.id] = { action: 'skip', at: new Date().toISOString(), reason: '수기 답변 있음' }; saveState(state); }
+          continue;
+        }
+      }
+
       let decision;
       try {
         decision = await decideReply(client, { postText: post.text, replyText: reply.text, replyUsername: reply.username });

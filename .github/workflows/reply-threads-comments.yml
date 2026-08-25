@@ -35,6 +35,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 🔴 체크아웃은 이 잡이 큐에 들어간 시점의 커밋에 고정된다 — concurrency 그룹이 실행 시작은
+      #    직렬화해도, 바로 앞 회차가 그새 커밋·푸시한 state/threads-replies.json 은 안 보일 수 있다.
+      #    그 상태로 답글을 판단하면 이미 처리한 답글을 "신규"로 오판해 중복 게시로 이어진다
+      #    (2026-08-25 실제 발생 — 같은 답글에 두 번 게시됨). 실행 전 최신 main 으로 맞춘다.
+      - name: 최신 상태로 동기화(중복 게시 방지)
+        run: git pull --ff-only origin main
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
