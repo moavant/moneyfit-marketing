@@ -7,7 +7,7 @@ import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-  loadState, saveState, pruneState, filterRepliesToProcess, enforceLength, buildUserPrompt,
+  loadState, saveState, pruneState, filterRepliesToProcess, hasOwnReply, enforceLength, buildUserPrompt,
 } from '../reply-comments.mjs';
 
 let pass = 0;
@@ -85,6 +85,22 @@ await t('filterRepliesToProcess: 본문 없는 답글(이미지 전용 등)은 �
   const replies = [{ id: '1', username: 'someone' }, { id: '2', text: '텍스트 있음', username: 'someone' }];
   const out = filterRepliesToProcess(replies, { processed: {} }, 'moneyfit_official');
   assert.deepEqual(out.map((r) => r.id), ['2']);
+});
+
+// --- hasOwnReply -------------------------------------------------------------
+await t('hasOwnReply: 우리 계정 답글(수기 포함)이 있으면 true', () => {
+  const children = [{ id: 'c1', username: 'someone' }, { id: 'c2', username: 'moneyfit_official' }];
+  assert.equal(hasOwnReply(children, 'moneyfit_official'), true);
+});
+
+await t('hasOwnReply: 우리 계정 답글이 없으면 false', () => {
+  const children = [{ id: 'c1', username: 'someone' }];
+  assert.equal(hasOwnReply(children, 'moneyfit_official'), false);
+});
+
+await t('hasOwnReply: children 이 비어있거나 없으면 false', () => {
+  assert.equal(hasOwnReply([], 'moneyfit_official'), false);
+  assert.equal(hasOwnReply(undefined, 'moneyfit_official'), false);
 });
 
 // --- enforceLength -------------------------------------------------------------
