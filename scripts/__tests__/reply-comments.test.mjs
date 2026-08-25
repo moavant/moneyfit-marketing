@@ -75,7 +75,7 @@ await t('filterRepliesToProcess: 우리 계정 자신의 답글은 제외', () =
 await t('filterRepliesToProcess: 숨김 처리된 답글은 제외', () => {
   const replies = [
     { id: '1', text: '스팸입니다', username: 'spammer', hide_status: 'HIDDEN' },
-    { id: '2', text: '정상 답글', username: 'someone', hide_status: 'NOT_HIDDEN' },
+    { id: '2', text: '정상 답글', username: 'someone', hide_status: 'NOT_HUSHED' },
   ];
   const out = filterRepliesToProcess(replies, { processed: {} }, 'moneyfit_official');
   assert.deepEqual(out.map((r) => r.id), ['2']);

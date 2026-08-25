@@ -136,7 +136,9 @@ export function filterRepliesToProcess(replies, state, myUsername) {
     if (!r?.id || !r?.text) return false;
     if (processed[r.id]) return false;
     if (myUsername && r.username === myUsername) return false;
-    if (r.hide_status && r.hide_status !== 'NOT_HIDDEN') return false;
+    // 🔴 스레드 API 의 "숨김 아님" 값은 NOT_HIDDEN 이 아니라 NOT_HUSHED 다(실 응답으로 확인,
+    //    2026-08-25). 예전엔 NOT_HIDDEN 과 비교해서 정상 답글까지 전부 걸러졌었다.
+    if (r.hide_status && r.hide_status !== 'NOT_HUSHED') return false;
     return true;
   });
 }
@@ -265,7 +267,7 @@ async function main() {
         if (!r?.id || !r?.text) reasons.push('본문없음');
         if (r?.id && state.processed?.[r.id]) reasons.push('이미처리');
         if (me.username && r?.username === me.username) reasons.push('자기답글');
-        if (r?.hide_status && r.hide_status !== 'NOT_HIDDEN') reasons.push(`숨김(${r.hide_status})`);
+        if (r?.hide_status && r.hide_status !== 'NOT_HUSHED') reasons.push(`숨김(${r.hide_status})`);
         console.log(`    - @${r?.username || '?'} (id ${r?.id || '?'}) 제외 사유: ${reasons.join(', ') || '(불명 — 필터 로직 확인 필요)'}`);
       }
     }
