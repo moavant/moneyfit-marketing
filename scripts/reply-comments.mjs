@@ -256,6 +256,19 @@ async function main() {
     if (repliesTruncated) console.error(`  · (경고) 게시물 ${post.id} 답글이 페이지 상한에서 잘림`);
 
     const candidates = filterRepliesToProcess(replies, state, me.username);
+    // 🔴 진단용 — 왜 후보가 0건인지 원인(API가 애초에 안 돌려줬는지 vs 필터가 걸렀는지)을
+    //    로그 없이는 알 수 없어서 추가. 답글이 하나라도 있는데 후보가 0건이면 답글별 제외 사유를 남긴다.
+    console.log(`  · 게시물 ${post.id}: 원본 답글 ${replies.length}건 조회 · 신규 후보 ${candidates.length}건`);
+    if (replies.length > 0 && candidates.length === 0) {
+      for (const r of replies) {
+        const reasons = [];
+        if (!r?.id || !r?.text) reasons.push('본문없음');
+        if (r?.id && state.processed?.[r.id]) reasons.push('이미처리');
+        if (me.username && r?.username === me.username) reasons.push('자기답글');
+        if (r?.hide_status && r.hide_status !== 'NOT_HIDDEN') reasons.push(`숨김(${r.hide_status})`);
+        console.log(`    - @${r?.username || '?'} (id ${r?.id || '?'}) 제외 사유: ${reasons.join(', ') || '(불명 — 필터 로직 확인 필요)'}`);
+      }
+    }
     for (const reply of candidates) {
       if (repliedCount >= MAX_PER_RUN) {
         console.error(`  · (경고) 1회 실행 게시 상한(${MAX_PER_RUN}건) 도달 — 나머지는 다음 회차로 미룸`);
