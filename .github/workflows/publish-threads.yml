@@ -174,7 +174,8 @@ jobs:
           TEXT="🧵 [스레드] ${HOUR}시 회차 발행 완료"
           while IFS= read -r f; do
             [ -z "$f" ] && continue
-            FIRST=$(jq -r '.text | split("\n")[0]' "$f" | head -c 80)
+            # [0:60] = jq 코드포인트 단위 슬라이스 — head -c(바이트)는 한글이 중간에 깨진다
+            FIRST=$(jq -r '.text | split("\n")[0] | .[0:60]' "$f")
             FU=$(jq -r 'if (.followUp // "") != "" then "있음" else "없음" end' "$f")
             TEXT="${TEXT}${NL}• $(basename "$f") — followUp ${FU}${NL}  첫 줄: ${FIRST}"
           done <<< "$FILES"
