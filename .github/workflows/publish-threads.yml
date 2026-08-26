@@ -169,15 +169,14 @@ jobs:
             echo "::warning::SLACK_WEBHOOK_THREADS 미설정 — Slack 보고 생략"
             exit 0
           fi
+          NL=$'\n'
           HOUR=$(TZ=Asia/Seoul date +%H)
           TEXT="🧵 [스레드] ${HOUR}시 회차 발행 완료"
           while IFS= read -r f; do
             [ -z "$f" ] && continue
             FIRST=$(jq -r '.text | split("\n")[0]' "$f" | head -c 80)
             FU=$(jq -r 'if (.followUp // "") != "" then "있음" else "없음" end' "$f")
-            TEXT="${TEXT}
-• $(basename "$f") — followUp ${FU}
-  첫 줄: ${FIRST}"
+            TEXT="${TEXT}${NL}• $(basename "$f") — followUp ${FU}${NL}  첫 줄: ${FIRST}"
           done <<< "$FILES"
           jq -n --arg text "$TEXT" '{text: $text}' \
             | curl -sS --fail-with-body -X POST -H 'Content-type: application/json' --data @- "$SLACK_WEBHOOK" \
@@ -191,7 +190,7 @@ jobs:
         run: |
           set -euo pipefail
           [ -z "${SLACK_WEBHOOK:-}" ] && exit 0
-          jq -n --arg text "⚠️ [스레드] 자동 게시 워크플로 실패 — 이번 회차 글이 게시되지 않았을 수 있습니다.
-로그: ${RUN_URL}" '{text: $text}' \
+          NL=$'\n'
+          jq -n --arg text "⚠️ [스레드] 자동 게시 워크플로 실패 — 이번 회차 글이 게시되지 않았을 수 있습니다.${NL}로그: ${RUN_URL}" '{text: $text}' \
             | curl -sS --fail-with-body -X POST -H 'Content-type: application/json' --data @- "$SLACK_WEBHOOK" \
             || echo "::warning::Slack 실패 보고도 발송 실패"
