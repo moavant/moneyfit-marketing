@@ -10,9 +10,11 @@ name: 스레드 댓글 자동응답
 #    기존 토큰에 없으면 Meta 앱 재인가 필요) + ANTHROPIC_API_KEY(신규 등록 필요).
 # ⚠️ 이 레포는 공개다. Actions 로그·Job Summary·state/ 커밋은 누구나 볼 수 있다
 #    (개인정보는 없고, 우리 계정이 이미 공개 게시한 답글 요약과 처리 시각만 담긴다).
+# 🔴 2026-08-30 컷오버 완료(SUS-263/DEC-218): 자동응답은 moneyfit 백엔드(Railway) in-process
+#    스케줄러(threads-reply, 15분)가 담당한다. schedule 트리거는 중복 게시 방지를 위해 제거 —
+#    재활성화 금지(양쪽이 동시에 돌면 같은 답글에 두 번 게시된다). workflow_dispatch 는 롤백
+#    비상용으로만 존치(수동 실행 전 백엔드 THREADS_REPLY_ENABLED=false 필수).
 on:
-  schedule:
-    - cron: '*/15 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
