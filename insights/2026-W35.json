@@ -1,0 +1,196 @@
+{
+  "weekKey": "2026-W35",
+  "label": "8/24~8/30",
+  "rangeStartIso": "2026-08-23T15:00:00.000Z",
+  "rangeEndIso": "2026-08-30T15:00:00.000Z",
+  "collectedAtIso": "2026-08-31T03:39:33.838Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 251,
+    "posts": 3,
+    "reach": 28,
+    "views": 85,
+    "saved": 0,
+    "interactions": 7,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18043632545619012",
+        "permalink": "https://www.instagram.com/p/DclBDUMG9nl/",
+        "timestamp": "2026-08-28T09:14:56+0000",
+        "title": "집 마련 준비, 청약통장부터 시작해보세요 🏠",
+        "reach": 9,
+        "views": 30,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18102508799607193",
+        "permalink": "https://www.instagram.com/p/Dcf3Od3lpvk/",
+        "timestamp": "2026-08-26T09:12:51+0000",
+        "title": "카드값이 부담스러워서 '일부만 결제'를 눌러본 적 있나요? 💳",
+        "reach": 10,
+        "views": 28,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "17907374628528968",
+        "permalink": "https://www.instagram.com/p/DcbPSWoiLYG/",
+        "timestamp": "2026-08-24T14:06:55+0000",
+        "title": "이자에 붙는 세금 15.4%, 합법적으로 아끼는 방법이 있어요 💡",
+        "reach": 9,
+        "views": 27,
+        "saved": 0,
+        "totalInteractions": 3
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 28,
+    "posts": 12,
+    "views": 14823,
+    "likes": 64,
+    "replies": 59,
+    "reposts": 1,
+    "quotes": 1,
+    "truncated": false,
+    "media": [
+      {
+        "id": "17954432991239026",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcqerYCFIep",
+        "timestamp": "2026-08-30T12:10:01+0000",
+        "title": "어릴 때 받던 명절 용돈이랑 지금 내가 주는 용돈, 비교해본 적 있음?",
+        "views": 66,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18093518918644997",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dcpgur2Eb9b",
+        "timestamp": "2026-08-30T03:08:42+0000",
+        "title": "홧김에 지른 소비 중에 제일 후회되는 거 있음?",
+        "views": 4069,
+        "likes": 9,
+        "replies": 21,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18172633372448110",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dcn55d-EXMs",
+        "timestamp": "2026-08-29T12:10:10+0000",
+        "title": "돈 잘 모으는 사람들 특징 중에 의외인 거 하나 알아?",
+        "views": 16,
+        "likes": 0,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17883326247486662",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dcm8BQIHEqm",
+        "timestamp": "2026-08-29T03:09:27+0000",
+        "title": "짠테크파야 탕진잼파야?",
+        "views": 159,
+        "likes": 0,
+        "replies": 6,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18386017093206659",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DclVLq4lOFu",
+        "timestamp": "2026-08-28T12:10:50+0000",
+        "title": "통신비로 매달 8만9천원 냈었는데, 이게 유별난 게 아니라 그냥 아무 생",
+        "views": 199,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18620835235017736",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dciw0AYlv6l",
+        "timestamp": "2026-08-27T12:14:34+0000",
+        "title": "가계부 한 달 켜보면 다들 놀라는 지출 3가지가 있음.",
+        "views": 172,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17960406588194170",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DchySjylqmy",
+        "timestamp": "2026-08-27T03:08:14+0000",
+        "title": "신용카드 vs 체크카드, 소비 통제는 카드 종류 차이임?",
+        "views": 392,
+        "likes": 1,
+        "replies": 4,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18110263292031235",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcgLZ_3lINe",
+        "timestamp": "2026-08-26T12:09:13+0000",
+        "title": "첫 월급 받았을 때는 월 30만원씩은 무조건 모아야지 다짐했었는데",
+        "views": 442,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18115574926941120",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcfM9ldlF_g",
+        "timestamp": "2026-08-26T03:03:35+0000",
+        "title": "축의금 5만원 내는 사람 아직도 있음?",
+        "views": 1303,
+        "likes": 2,
+        "replies": 8,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18128526577739414",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcdnN77m7Iw",
+        "timestamp": "2026-08-25T12:14:32+0000",
+        "title": "통장에서 매달 빠져나가는데 뭔지도 모르는 구독, 평균 2~3개는 다들 있",
+        "views": 176,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18123160300797215",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcconX0ID2t",
+        "timestamp": "2026-08-25T03:07:30+0000",
+        "title": "더치페이 진짜 무조건 1/N이 맞다고 생각함?",
+        "views": 417,
+        "likes": 1,
+        "replies": 11,
+        "reposts": 0,
+        "quotes": 1
+      },
+      {
+        "id": "18064699937752490",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DcbXXN5oCC7",
+        "timestamp": "2026-08-24T15:17:30+0000",
+        "title": "월급 250 찍히자마자 카드값 180 빠져나가는 거 보고 순간 숨 멎었다",
+        "views": 7412,
+        "likes": 51,
+        "replies": 1,
+        "reposts": 1,
+        "quotes": 0
+      }
+    ]
+  }
+}
