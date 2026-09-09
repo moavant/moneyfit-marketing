@@ -48,7 +48,7 @@ li .x{flex:none;width:52px;height:52px;border-radius:50%;background:#FDE8E8;colo
 .foot{font-size:28px;color:#9AA8B6;font-weight:600}
 .cta body,.logo{display:flex;align-items:center;gap:18px;font-size:38px;font-weight:800}
 .logo .mark{width:74px;height:74px;border-radius:18px;background:#fff;color:#1A73E8;font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.logo .mark img{width:100%;height:100%;object-fit:cover;transform:scale(1.32)}
+.logo .mark img{width:100%;height:100%;object-fit:cover}
 .cta h1{font-size:96px;line-height:1.18;font-weight:800;letter-spacing:-2px}
 .cta .sub{margin-top:36px;font-size:44px;line-height:1.5;font-weight:500;opacity:.92}
 .fcard{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:32px;padding:44px 48px;margin-top:8px;display:flex;flex-direction:column;gap:18px}
