@@ -43,6 +43,14 @@ export function pickMetric(ins, name) {
   return typeof v === 'number' ? v : null;
 }
 
+// SUS-281 §4.1-(5) — insights `replies` 는 전 깊이 우리 답글까지 포함해 오염된다(실측:
+// 게시물 18093518918644997 replies=21 중 우리 10건). `/conversation` 평면 목록에서 우리
+// username 을 제외한 행 수 = 사용자 답글 수(우리가 답글을 많이 달수록 "반응 좋은 글"로
+// 오학습하는 것을 막는다, PLAYBOOK §6). 네트워크 무의존 순수 함수.
+export function computeUserReplies(rows, myUsername) {
+  return (rows || []).filter((r) => r && r.username !== myUsername).length;
+}
+
 // 오래된 지표 파일 정리 — 파일명 YYYY-MM-DD.json 기준(zero-pad 고정폭 → 사전순 = 시간순)
 export function pruneOldFiles(dir, keepDays, today = new Date()) {
   const cutoff = kstDateString(new Date(today.getTime() - keepDays * 86400 * 1000));
@@ -158,6 +166,33 @@ async function main() {
       if (e instanceof RateLimitError) throw e;
       console.error(`  · 게시물 ${m.id} 지표 실패(계속 진행): ${e.message}`);
     }
+
+    // SUS-281 — /conversation 기반 userReplies(우리 답글 제외). insights 실패와 별개로
+    // 독립 수집(둘 다 실패해도 다른 필드는 살릴 수 있게 — insightsOk 관례와 동일하게
+    // "수집 실패"(null)와 "값 0"을 구분한다).
+    let userReplies = null; let userRepliesOk = false;
+    try {
+      // 🔴 보안리뷰 D8 — me.username 이 없으면 우리 답글까지 세어 과다 집계가 "성공"으로
+      //    위장된다 → 수집 실패로 분류. paging.next(목록 절단)도 과소 집계이므로 동일하게
+      //    실패 처리한다(next URL 은 access_token 이 실려 올 수 있어 절대 따라가지 않는다).
+      if (me.username) {
+        const conv = await api(`${m.id}/conversation`, { fields: 'id,username', limit: '100' });
+        if (conv?.paging?.next) {
+          console.error(`  · 게시물 ${m.id} 대화 목록 절단(100+건) — userReplies 실패로 분류(과소 집계 방지)`);
+        } else if (!Array.isArray(conv?.data)) {
+          console.error(`  · 게시물 ${m.id} 대화 응답에 data 배열 없음 — userReplies 실패로 분류`);
+        } else {
+          userReplies = computeUserReplies(conv.data, me.username);
+          userRepliesOk = true;
+        }
+      } else {
+        console.error(`  · 계정 username 없음 — userReplies 수집 생략(전 게시물)`);
+      }
+    } catch (e) {
+      if (e instanceof RateLimitError) throw e;
+      console.error(`  · 게시물 ${m.id} 대화(conversation) 수집 실패(계속 진행): ${e.message}`);
+    }
+
     posts.push({
       id: m.id,
       permalink: m.permalink ?? null,
@@ -167,9 +202,11 @@ async function main() {
       insightsOk, // 🔴 false = "수집 실패" (null 지표와 "값 0"을 구분하는 근거)
       views: pickMetric(ins, 'views'),
       likes: pickMetric(ins, 'likes'),
-      replies: pickMetric(ins, 'replies'),
+      replies: pickMetric(ins, 'replies'), // 🔴 전 깊이 우리 답글 포함(오염됨) — 유지(하위호환), 학습에는 userReplies 사용
       reposts: pickMetric(ins, 'reposts'),
       quotes: pickMetric(ins, 'quotes'),
+      userReplies, // 🆕 SUS-281 — 우리 답글 제외 사용자 답글 수(/conversation 기반)
+      userRepliesOk, // 🆕 SUS-281 — "수집 실패"와 "0"을 구분
     });
     await sleep(300); // 게시물별 insights 호출 사이 살짝 간격(레이트리밋 예방)
   }

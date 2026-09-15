@@ -8,7 +8,7 @@ import {
   loadPostedState, savePostedState, LIMIT,
 } from '../post-thread-text.mjs';
 import {
-  kstDateString, pickMetric, pruneOldFiles, fetchInsightsWithFallback, RateLimitError,
+  kstDateString, pickMetric, pruneOldFiles, fetchInsightsWithFallback, RateLimitError, computeUserReplies,
 } from '../collect-threads-metrics.mjs';
 import { mkdtempSync, writeFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -170,6 +170,30 @@ await t('fetchInsightsWithFallback: 레이트리밋은 폴백 없이 즉시 재t
   const api = async () => { calls++; throw new RateLimitError('레이트리밋(code 4)'); };
   await assert.rejects(() => fetchInsightsWithFallback(api, 'id1', ['views', 'likes']), RateLimitError);
   assert.equal(calls, 1); // 개별 폴백으로 쿼터를 더 태우지 않는다
+});
+
+// --- SUS-281: computeUserReplies ---------------------------------------------
+await t('computeUserReplies: 우리 username 제외 행 수(실측 게시물 18093518918644997 — 21행 중 우리 10건 → 11)', () => {
+  const rows = [
+    ...Array(10).fill({ username: 'moneyfit_official' }),
+    ...Array(11).fill({ username: 'someone_else' }),
+  ];
+  assert.equal(computeUserReplies(rows, 'moneyfit_official'), 11);
+});
+
+await t('computeUserReplies: rows 가 비어있거나 없으면 0', () => {
+  assert.equal(computeUserReplies([], 'moneyfit_official'), 0);
+  assert.equal(computeUserReplies(undefined, 'moneyfit_official'), 0);
+});
+
+await t('computeUserReplies: myUsername 이 없으면 전부 카운트(필터링 안 함)', () => {
+  const rows = [{ username: 'a' }, { username: 'b' }];
+  assert.equal(computeUserReplies(rows, undefined), 2);
+});
+
+await t('computeUserReplies: null/undefined 행은 무시', () => {
+  const rows = [{ username: 'a' }, null, undefined, { username: 'moneyfit_official' }];
+  assert.equal(computeUserReplies(rows, 'moneyfit_official'), 1);
 });
 
 console.log(`\n${pass}개 통과${process.exitCode ? ' (실패 있음)' : ''}`);
