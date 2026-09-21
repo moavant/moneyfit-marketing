@@ -1,0 +1,219 @@
+{
+  "weekKey": "2026-W38",
+  "label": "9/14~9/20",
+  "rangeStartIso": "2026-09-13T15:00:00.000Z",
+  "rangeEndIso": "2026-09-20T15:00:00.000Z",
+  "collectedAtIso": "2026-09-21T03:20:51.113Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 248,
+    "posts": 2,
+    "reach": 21,
+    "views": 65,
+    "saved": 0,
+    "interactions": 4,
+    "truncated": false,
+    "media": [
+      {
+        "id": "17991353442043116",
+        "permalink": "https://www.instagram.com/p/DdbFQnKm3-W/",
+        "timestamp": "2026-09-18T09:10:41+0000",
+        "title": "가을은 결혼식 시즌이라 청첩장이 유독 많이 오죠 💌",
+        "reach": 12,
+        "views": 38,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18101478647366079",
+        "permalink": "https://www.instagram.com/p/DdV7sH-G0ks/",
+        "timestamp": "2026-09-16T09:10:52+0000",
+        "title": "아이 키우다 보면 학원비, 기저귀 정기배송, 병원비까지... 매달 어디로",
+        "reach": 9,
+        "views": 27,
+        "saved": 0,
+        "totalInteractions": 2
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 28,
+    "posts": 15,
+    "views": 2453,
+    "likes": 6,
+    "replies": 23,
+    "reposts": 0,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "17909330241498172",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdgjNbDFjfC",
+        "timestamp": "2026-09-20T12:08:37+0000",
+        "title": "자취가 진짜 어른 되는 지름길이라고 생각했는데",
+        "views": 266,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18149488735556967",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdflkWKGwO1",
+        "timestamp": "2026-09-20T03:09:59+0000",
+        "title": "거지방 들어가서 매일 지출 인증하고 갈굼당하는 거, 그게 진짜 효과 있음",
+        "views": 88,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18076737590393266",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Ddd-g44IIlH",
+        "timestamp": "2026-09-19T12:09:28+0000",
+        "title": "카드값 문자 보고 소름 돋는 거, 왜 알면서도 매번 또 당할까",
+        "views": 100,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18163750591490891",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DddAlUXl8Us",
+        "timestamp": "2026-09-19T03:08:19+0000",
+        "title": "통장 여러 개로 쪼개서 관리하는 사람 진짜 있음?",
+        "views": 478,
+        "likes": 1,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18102630488362230",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdbZuE6FjBG",
+        "timestamp": "2026-09-18T12:09:29+0000",
+        "title": "월급날 기분 좋은 거, 반나절도 못 가는 사람 있음?",
+        "views": 114,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17908944384473986",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Ddab6mbFBVo",
+        "timestamp": "2026-09-18T03:09:25+0000",
+        "title": "사고 나서 후회하는 거랑 안 사서 후회하는 거, 왜 둘 중 하나는 꼭 걸",
+        "views": 80,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18430525939197710",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdY1C1nlg-Y",
+        "timestamp": "2026-09-17T12:10:32+0000",
+        "title": "명절 용돈은 왜 한번 올리면 죽어도 못 내려갈까",
+        "views": 3,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17906069907482501",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdX3HQ4FhrY",
+        "timestamp": "2026-09-17T03:09:22+0000",
+        "title": "하루 커피값 계산해보고 놀란 사람 있음?",
+        "views": 196,
+        "likes": 0,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18119477300291164",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdWQOzCiRra",
+        "timestamp": "2026-09-16T12:10:22+0000",
+        "title": "넷플릭스·디즈니·티빙 동시에 다 결제해서 보는 사람 있음?",
+        "views": 272,
+        "likes": 0,
+        "replies": 5,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18112355456607869",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdVSQeJkVf8",
+        "timestamp": "2026-09-16T03:08:50+0000",
+        "title": "배달비 아까운 거 알면서도 계속 시키는 이유가 뭘까",
+        "views": 114,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18112482962121719",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdTrbWXlspr",
+        "timestamp": "2026-09-15T12:10:18+0000",
+        "title": "알뜰폰 갈아타면 통신비 반값이라는데, 왜 다들 안 갈아탈까?",
+        "views": 124,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18352944391170098",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdTJtz2mofS",
+        "timestamp": "2026-09-15T07:15:36+0000",
+        "title": "주차비 아끼려고 깐 모두의주차장에서 테슬라 모델X 한 달 렌트권 뽑기 중",
+        "views": 183,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17946743445289374",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdStaG6lVJS",
+        "timestamp": "2026-09-15T03:08:21+0000",
+        "title": "앱테크로 진짜 용돈벌이 되는 사람 있음?",
+        "views": 2,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18107394976973128",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdRGoBdlkHe",
+        "timestamp": "2026-09-14T12:10:14+0000",
+        "title": "구독 앱 켤 때마다 칼같이 정리하는 사람 vs 있는지도 모르고 냅두는 사",
+        "views": 100,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17978429733104050",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdQInHrFBv1",
+        "timestamp": "2026-09-14T03:08:20+0000",
+        "title": "돈 모으는 사람들 은근 다 하는 공통점 3가지 있음.",
+        "views": 333,
+        "likes": 4,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
