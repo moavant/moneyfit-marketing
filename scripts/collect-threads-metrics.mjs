@@ -16,6 +16,7 @@
 import { writeFileSync, mkdirSync, readdirSync, unlinkSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadPostedState } from './post-thread-text.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = join(__dirname, '..', 'threads', 'metrics');
@@ -27,6 +28,16 @@ const METRICS = ['views', 'likes', 'replies', 'reposts', 'quotes'];
 const RATE_LIMIT_CODES = [4, 17, 32, 613]; // 재시도해도 쿼터만 태운다 — 즉시 포기
 
 export class RateLimitError extends Error {}
+
+// 게시 기록(state/threads-posted.json)에서 본글 id → 주제 태그 맵을 만든다.
+// followUp(자기 댓글)에는 태그를 붙이지 않으므로 본글 id 만 매핑한다. 태그 없는 글은 맵에 없다(→ null).
+export function buildTopicTagIndex(state) {
+  const idx = new Map();
+  for (const rec of Object.values(state?.posted || {})) {
+    if (rec?.postId && typeof rec.topicTag === 'string' && rec.topicTag) idx.set(String(rec.postId), rec.topicTag);
+  }
+  return idx;
+}
 
 // KST 날짜 문자열 (실행 환경 TZ 와 무관하게 고정)
 export function kstDateString(now = new Date()) {
@@ -156,6 +167,9 @@ async function main() {
     console.error(`  · (경고) 목록이 ${POST_LIMIT}건에서 잘림 — 관측 창이 좁아졌을 수 있음(limit 상향 검토)`);
   }
 
+  // 주제 태그는 게시 기록에서 찾는다 — 태그별 성과 학습용(기록이 없거나 깨져도 수집은 계속)
+  const topicTags = buildTopicTagIndex(loadPostedState());
+
   const posts = [];
   for (const m of rows) {
     let ins = null; let insightsOk = false;
@@ -199,6 +213,7 @@ async function main() {
       timestamp: m.timestamp ?? null,
       isReply: typeof m.is_reply === 'boolean' ? m.is_reply : null, // 필드가 조용히 누락되면 false 아닌 null
       text: [...(m.text || '')].slice(0, 300).join(''), // 코드포인트 기준 — 이모지 절단 방지
+      topicTag: topicTags.get(String(m.id)) ?? null, // 주제 태그(없으면 null)
       insightsOk, // 🔴 false = "수집 실패" (null 지표와 "값 0"을 구분하는 근거)
       views: pickMetric(ins, 'views'),
       likes: pickMetric(ins, 'likes'),

@@ -5,10 +5,11 @@
 import assert from 'node:assert/strict';
 import {
   sanitizeThreadText, clampLength, parsePostFile, sanitizeLossRatio,
-  loadPostedState, savePostedState, LIMIT,
+  loadPostedState, savePostedState, LIMIT, normalizeTopicTag, createPostContainer,
 } from '../post-thread-text.mjs';
 import {
   kstDateString, pickMetric, pruneOldFiles, fetchInsightsWithFallback, RateLimitError, computeUserReplies,
+  buildTopicTagIndex,
 } from '../collect-threads-metrics.mjs';
 import { mkdtempSync, writeFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -194,6 +195,71 @@ await t('computeUserReplies: myUsername 이 없으면 전부 카운트(필터링
 await t('computeUserReplies: null/undefined 행은 무시', () => {
   const rows = [{ username: 'a' }, null, undefined, { username: 'moneyfit_official' }];
   assert.equal(computeUserReplies(rows, 'moneyfit_official'), 1);
+});
+
+await t('normalizeTopicTag: # 떼고 공백 정리, 1~50자, 마침표·& 금지, 문자열만', () => {
+  assert.equal(normalizeTopicTag('#가계부'), '가계부');
+  assert.equal(normalizeTopicTag('  사회  초년생 '), '사회 초년생');
+  assert.equal(normalizeTopicTag(''), null);
+  assert.equal(normalizeTopicTag('   '), null);
+  assert.equal(normalizeTopicTag('가'.repeat(50)), '가'.repeat(50));
+  assert.equal(normalizeTopicTag('가'.repeat(51)), null);
+  assert.equal(normalizeTopicTag('moavant.com'), null);
+  assert.equal(normalizeTopicTag('절약&저축'), null);
+  assert.equal(normalizeTopicTag(['가계부']), null);
+  assert.equal(normalizeTopicTag(undefined), null);
+});
+
+await t('parsePostFile: topicTag 정규화 — 규칙 위반 태그는 버리고 본문은 게시', () => {
+  const ok = parsePostFile(JSON.stringify({ text: '이번 달 식비 얼마 나왔어?', topicTag: '#가계부' }));
+  assert.equal(ok.topicTag, '가계부');
+  const bad = parsePostFile(JSON.stringify({ text: '이번 달 식비 얼마 나왔어?', topicTag: 'a&b' }));
+  assert.equal(bad.topicTag, null);
+  assert.equal(bad.text, '이번 달 식비 얼마 나왔어?');
+  const none = parsePostFile(JSON.stringify({ text: '이번 달 식비 얼마 나왔어?' }));
+  assert.equal(none.topicTag, null);
+});
+
+await t('buildTopicTagIndex: 본글 id → 태그, 태그 없는 글·followUp 은 매핑 안 함', () => {
+  const idx = buildTopicTagIndex({ posted: {
+    'threads/posts/a.json': { postId: '111', followUpId: '222', topicTag: '가계부' },
+    'threads/posts/b.json': { postId: '333' },
+    'threads/posts/c.json': null,
+  } });
+  assert.equal(idx.get('111'), '가계부');
+  assert.equal(idx.has('222'), false);
+  assert.equal(idx.has('333'), false);
+  assert.equal(buildTopicTagIndex(undefined).size, 0);
+});
+
+await t('createPostContainer: 태그는 본글 파라미터에 실리고, API 가 태그를 거부하면 태그 없이 1회 재시도', async () => {
+  const quiet = { error() {} };
+  const calls = [];
+  const okApi = async (m, path, params) => { calls.push(params); return { id: 'c1' }; };
+  const r1 = await createPostContainer(okApi, 'u', '본문', '가계부', quiet);
+  assert.equal(r1.appliedTag, '가계부');
+  assert.equal(calls[0].topic_tag, '가계부');
+
+  const seen = [];
+  const rejectTagApi = async (m, path, params) => {
+    seen.push(params);
+    if (params.topic_tag) throw new Error('API 실패: invalid topic_tag');
+    return { id: 'c2' };
+  };
+  const r2 = await createPostContainer(rejectTagApi, 'u', '본문', '가계부', quiet);
+  assert.equal(r2.container.id, 'c2');
+  assert.equal(r2.appliedTag, null);
+  assert.equal(seen.length, 2);
+  assert.equal('topic_tag' in seen[1], false);
+
+  const plain = [];
+  const r3 = await createPostContainer(async (m, p, params) => { plain.push(params); return { id: 'c3' }; }, 'u', '본문', null, quiet);
+  assert.equal(r3.appliedTag, null);
+  assert.equal(plain.length, 1);
+  assert.equal('topic_tag' in plain[0], false);
+
+  // 태그 없이도 실패하는 오류(토큰 등)는 그대로 던진다 — 폴백이 실패를 삼키지 않는다
+  await assert.rejects(() => createPostContainer(async () => { throw new Error('token'); }, 'u', '본문', '가계부', quiet), /token/);
 });
 
 console.log(`\n${pass}개 통과${process.exitCode ? ' (실패 있음)' : ''}`);

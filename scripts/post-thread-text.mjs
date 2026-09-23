@@ -60,7 +60,19 @@ export function clampLength(t = '', limit = LIMIT) {
   return `${cp.slice(0, limit - 1).join('').trimEnd()}…`;
 }
 
-// 콘텐츠 파일 검증 — text 필수, followUp(본글 직후 이어 달 자기 댓글)은 선택
+// 스레드 주제 태그(topic_tag) — Meta 규칙: 글당 1개, 1~50자, 마침표(.)·앰퍼샌드(&) 금지.
+// 앞의 # 은 떼어낸다. 규칙에 안 맞으면 null(태그 없이 게시 — 태그 때문에 글이 실패하지 않게).
+// 태그 선택 기준(어떤 주제를 고를지)은 내부(비공개) 운영 문서가 정본이다.
+export function normalizeTopicTag(raw) {
+  if (typeof raw !== 'string') return null;
+  const s = raw.trim().replace(/^#+/, '').replace(/\s+/g, ' ').trim();
+  const len = [...s].length;
+  if (len < 1 || len > 50) return null;
+  if (/[.&。．＆]/.test(s)) return null;
+  return s;
+}
+
+// 콘텐츠 파일 검증 — text 필수, followUp(본글 직후 이어 달 자기 댓글)·topicTag(주제 태그)는 선택
 export function parsePostFile(raw) {
   let data;
   try { data = JSON.parse(raw); } catch { throw new Error('JSON 파싱 실패 — 유효한 JSON 이 아닙니다.'); }
@@ -72,7 +84,8 @@ export function parsePostFile(raw) {
   const followUp = typeof data.followUp === 'string'
     ? clampLength(sanitizeThreadText(data.followUp)) || null
     : null;
-  return { ...data, text, followUp };
+  const topicTag = normalizeTopicTag(data.topicTag);
+  return { ...data, text, followUp, topicTag };
 }
 
 // 정화로 얼마나 잘려나갔는지 — 루틴이 쓴 글과 게시본이 조용히 달라지는 것을 로그로 드러낸다
@@ -92,6 +105,20 @@ export function savePostedState(state, file = STATE_FILE) {
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 본글 컨테이너 생성 — 주제 태그는 본글에만 붙인다(followUp 자기 댓글에는 붙이지 않는다).
+// 태그를 API 가 거부해도 본글은 살린다: 컨테이너 생성은 게시 전 단계라 태그 없이 재시도해도 중복 게시가 없다.
+// appliedTag = 실제로 붙은 태그(폴백으로 빠지면 null — 게시 기록·지표에 거짓 태그가 남지 않게).
+export async function createPostContainer(api, userId, text, topicTag, log = console) {
+  const base = { media_type: 'TEXT', text };
+  if (!topicTag) return { container: await api('POST', `${userId}/threads`, base), appliedTag: null };
+  try {
+    return { container: await api('POST', `${userId}/threads`, { ...base, topic_tag: topicTag }), appliedTag: topicTag };
+  } catch (e) {
+    log.error(`::warning::주제 태그(${topicTag}) 포함 생성 실패 — 태그 없이 재시도: ${e.message}`);
+    return { container: await api('POST', `${userId}/threads`, base), appliedTag: null };
+  }
+}
 
 function makeApi(token) {
   const clean = String(token ?? '').trim();
@@ -173,6 +200,10 @@ async function main() {
     const msg = `정화로 본문의 ${(loss * 100).toFixed(0)}% 가 제거됨 — 원문에 링크·해시태그·CTA 가 섞여 있었음`;
     if (loss > 0.2) console.error(`::warning::${msg} (원문 점검 필요)`); else console.log(`  · ${msg}`);
   }
+  const rawTag = JSON.parse(raw).topicTag;
+  if (rawTag != null && !(typeof rawTag === 'string' && !rawTag.trim()) && !post.topicTag) {
+    console.error('::warning::topicTag 규칙 위반(1~50자, 마침표·& 금지) — 태그 없이 게시');
+  }
   if ([...sanitizedOnly].length > LIMIT) {
     console.log(`  · 본문이 ${LIMIT}자를 넘어 말줄임 처리됨 (정화와 무관한 길이 초과)`);
   }
@@ -181,6 +212,7 @@ async function main() {
     console.log('--- dry-run: 실제 게시 없음. 게시될 본문 ---');
     console.log(post.text);
     if (post.followUp) { console.log('--- followUp(자기 댓글) ---'); console.log(post.followUp); }
+    console.log(`--- 주제 태그: ${post.topicTag || '(없음)'}`);
     return;
   }
   if (!TOKEN) { console.error('✗ THREADS_ACCESS_TOKEN 환경변수가 없습니다.'); process.exit(1); }
@@ -190,14 +222,17 @@ async function main() {
   if (!me.id) throw new Error('스레드 사용자 ID를 가져오지 못했습니다(토큰 권한 확인).');
   console.log(`스레드 계정: @${me.username || '?'} (id ${me.id})`);
 
-  const c = await api('POST', `${me.id}/threads`, { media_type: 'TEXT', text: post.text });
+  // 주제 태그는 본글에만 붙인다(followUp 자기 댓글에는 붙이지 않는다)
+  if (post.topicTag) console.log(`  · 주제 태그: ${post.topicTag}`);
+  const { container: c, appliedTag } = await createPostContainer(api, me.id, post.text, post.topicTag);
   await waitReady(api, c.id);
   const pub = await api('POST', `${me.id}/threads_publish`, { creation_id: c.id });
   console.log(`✅ 스레드 게시 완료! id: ${pub.id}`);
 
   // 🔴 본글 성공 즉시 상태 기록 — followUp 실패·중단으로 재실행돼도 본글이 중복되지 않게.
   state.posted = state.posted || {};
-  state.posted[key] = { postId: pub.id, at: new Date().toISOString() };
+  // topicTag 도 함께 남긴다 — 지표 수집(collect-threads-metrics.mjs)이 게시물 id 로 태그를 찾아 태그별 성과를 학습한다.
+  state.posted[key] = { postId: pub.id, at: new Date().toISOString(), ...(appliedTag ? { topicTag: appliedTag } : {}) };
   savePostedState(state);
 
   // followUp: 본글 게시 직후 이어서 다는 자기 댓글(선택).
