@@ -1,0 +1,196 @@
+{
+  "weekKey": "2026-W39",
+  "label": "9/21~9/27",
+  "rangeStartIso": "2026-09-20T15:00:00.000Z",
+  "rangeEndIso": "2026-09-27T15:00:00.000Z",
+  "collectedAtIso": "2026-09-28T03:40:30.116Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 246,
+    "posts": 3,
+    "reach": 19,
+    "views": 54,
+    "saved": 0,
+    "interactions": 6,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18204481729370443",
+        "permalink": "https://www.instagram.com/p/DdtGGMEmzXn/",
+        "timestamp": "2026-09-25T09:04:19+0000",
+        "title": "1년 넘게 잊고 있던 계좌, 혹시 있으신가요? 💰",
+        "reach": 6,
+        "views": 18,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18119912057511553",
+        "permalink": "https://www.instagram.com/p/Ddn9HQKFqKY/",
+        "timestamp": "2026-09-23T09:09:37+0000",
+        "title": "9월 16일부터 30일까지, 재산세(주택분 2차·토지분) 납부 기간인 거",
+        "reach": 5,
+        "views": 18,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18123911363505181",
+        "permalink": "https://www.instagram.com/p/Ddizd7PmzUj/",
+        "timestamp": "2026-09-21T09:09:08+0000",
+        "title": "가을은 이사철이라 이사 준비하는 분들 많으시죠 🏠",
+        "reach": 8,
+        "views": 18,
+        "saved": 0,
+        "totalInteractions": 2
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 29,
+    "posts": 12,
+    "views": 2616,
+    "likes": 7,
+    "replies": 14,
+    "reposts": 3,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18131579500778596",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Ddyl01xEfoJ",
+        "timestamp": "2026-09-27T12:17:50+0000",
+        "title": "자취 월세 55만이면 끝인 줄 알았는데, 관리비 8만+가스전기 6만+인터",
+        "views": 7,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 1,
+        "quotes": 0
+      },
+      {
+        "id": "18122083363914408",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Ddxn9pFjnPN",
+        "timestamp": "2026-09-27T03:17:16+0000",
+        "title": "축의금, 얼마나 친한지 보고 액수 정하는 사람 아직 있음?",
+        "views": 630,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 1,
+        "quotes": 0
+      },
+      {
+        "id": "18159941692515734",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdwBB5wG8Iz",
+        "timestamp": "2026-09-26T12:17:48+0000",
+        "title": "자주 가는 국밥집이 작년엔 8천원이었는데 지금은 만원 넘게 받음. 편의점",
+        "views": 381,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18043481261817310",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdvDG1JFANp",
+        "timestamp": "2026-09-26T03:16:41+0000",
+        "title": "연말정산 환급금 받자마자 다 써버리는 파 vs 그대로 저축하는 파, 너넨",
+        "views": 49,
+        "likes": 2,
+        "replies": 3,
+        "reposts": 1,
+        "quotes": 0
+      },
+      {
+        "id": "18137866081628396",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdtcF97G_S1",
+        "timestamp": "2026-09-25T12:16:33+0000",
+        "title": "저축 자동화 3단계, 한 번만 세팅해두면 신경 안 써도 됨",
+        "views": 409,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18032875292889636",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Ddsema1FLQ6",
+        "timestamp": "2026-09-25T03:19:13+0000",
+        "title": "더치페이 하자고 먼저 말 꺼내는 사람 진짜 있음?",
+        "views": 38,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18122416130304672",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdoSmzgkXPE",
+        "timestamp": "2026-09-23T12:17:30+0000",
+        "title": "연봉 올랐는데 저축액은 그대로인 사람 있음?",
+        "views": 188,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18120081680512468",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdnU7jfDuD3",
+        "timestamp": "2026-09-23T03:18:31+0000",
+        "title": "짠테크 인증샷 매일 올리는 사람들, 그거 진짜 순수 동기부여 때문일까?",
+        "views": 96,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18089445257214783",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Ddltzt0nGdo",
+        "timestamp": "2026-09-22T12:17:25+0000",
+        "title": "넷플릭스·유튜브프리미엄·멜론 다 합친 구독료, 스타벅스로 환산해서 계산기",
+        "views": 173,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17903830725569389",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdkvE8Cm216",
+        "timestamp": "2026-09-22T03:09:17+0000",
+        "title": "가계부 켜서 지출 내역 보고 그 자리에서 뭐 하나 진짜로 끊어본 사람 있",
+        "views": 125,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18115174204958335",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdjIEGqm-1c",
+        "timestamp": "2026-09-21T12:09:08+0000",
+        "title": "무지출 데이 한 달에 10일씩 지킨다는 사람 진짜 있음?",
+        "views": 373,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18116033410784207",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DdiKPwjlp3m",
+        "timestamp": "2026-09-21T03:08:57+0000",
+        "title": "첫 월급 받고 '매달 100은 무조건 모은다' 다짐했었음.",
+        "views": 147,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
