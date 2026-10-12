@@ -1,0 +1,218 @@
+{
+  "weekKey": "2026-W41",
+  "label": "10/5~10/11",
+  "rangeStartIso": "2026-10-04T15:00:00.000Z",
+  "rangeEndIso": "2026-10-11T15:00:00.000Z",
+  "collectedAtIso": "2026-10-12T04:21:34.333Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 242,
+    "posts": 3,
+    "reach": 24,
+    "views": 88,
+    "saved": 0,
+    "interactions": 6,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18119016343766302",
+        "permalink": "https://www.instagram.com/p/DeRJVW_FXHa/",
+        "timestamp": "2026-10-09T09:05:17+0000",
+        "title": "프리랜서·N잡러라면 다 아는 그 숫자, 3.3% 💸 용역비 들어올 때마다",
+        "reach": 7,
+        "views": 26,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18135540142638234",
+        "permalink": "https://www.instagram.com/p/DeL_r59G7BG/",
+        "timestamp": "2026-10-07T09:04:42+0000",
+        "title": "아침저녁으로 쌀쌀해지니 보일러 켜는 날이 늘었죠 🔥 슬슬 난방비·가스비 ",
+        "reach": 8,
+        "views": 35,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "17894945121610206",
+        "permalink": "https://www.instagram.com/p/DeG19_dFYSv/",
+        "timestamp": "2026-10-05T09:03:39+0000",
+        "title": "달력에 약속이 하나둘 늘어나는 요즘, 회식·모임 자리에서 쓴 돈은 나중에",
+        "reach": 9,
+        "views": 27,
+        "saved": 0,
+        "totalInteractions": 2
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 30,
+    "posts": 14,
+    "views": 1227,
+    "likes": 4,
+    "replies": 14,
+    "reposts": 1,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18384411922228909",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeWpKmOoC9N",
+        "timestamp": "2026-10-11T12:19:39+0000",
+        "title": "요즘 스레드에서 짠테크 인증샷 패턴 보면 다 똑같음.",
+        "views": 93,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18030812552686164",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeVrUkljm0z",
+        "timestamp": "2026-10-11T03:19:14+0000",
+        "title": "더치페이 정산할 때 나는 계좌번호 받아서 바로 이체하는데, 친구들은 다 ",
+        "views": 13,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17937742551125942",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeUEOOflZTs",
+        "timestamp": "2026-10-10T12:18:21+0000",
+        "title": "가계부 켜고 진짜 충격받은 항목, 예상했던 거였음 아니면 전혀 생각도 못",
+        "views": 126,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18085737557319195",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeTGrrOHJVP",
+        "timestamp": "2026-10-10T03:20:36+0000",
+        "title": "자취하면 돈 더 빨리 모을 줄 알았는데, 막상 해보면 본가 있을 때보다 ",
+        "views": 136,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18129992878696481",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeRfjCCG4OD",
+        "timestamp": "2026-10-09T12:19:24+0000",
+        "title": "연봉 오르면 주변에 티 내고 싶어서 한턱 쏘는 사람 vs 오르고도 똑같이",
+        "views": 1,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18144647437571967",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeQhwE9gHWG",
+        "timestamp": "2026-10-09T03:19:24+0000",
+        "title": "무지출 챌린지 며칠째에 깨지는지 숫자로 말해봐.",
+        "views": 42,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17913805881464822",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeO6rBdkVsG",
+        "timestamp": "2026-10-08T12:18:42+0000",
+        "title": "무지출 챌린지 할 때 SNS에 선언하고 시작하는 사람 vs 아무도 모르게",
+        "views": 23,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18105885212256799",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeN83Mym0-V",
+        "timestamp": "2026-10-08T03:18:36+0000",
+        "title": "카드값 보고 소름 돋는 거, 한 달에 몇 번이나 되는지 숫자로 말해봐.",
+        "views": 63,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18007777116000987",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeMV6ivG3E0",
+        "timestamp": "2026-10-07T12:19:01+0000",
+        "title": "거지방 들어가서 지출 인증하는 사람들 많아졌잖아.",
+        "views": 108,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17927939517179907",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeLYTwXG0Mp",
+        "timestamp": "2026-10-07T03:20:42+0000",
+        "title": "앱테크로 버는 돈, 시급으로 계산하면 최저임금도 안 나온다는 거 알아?",
+        "views": 98,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18283878307291350",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeJxS-2FWiD",
+        "timestamp": "2026-10-06T12:20:34+0000",
+        "title": "명절마다 형제들이랑 부모님 용돈 액수 맞추는 거 때문에 은근 눈치싸움 함",
+        "views": 188,
+        "likes": 2,
+        "replies": 1,
+        "reposts": 1,
+        "quotes": 0
+      },
+      {
+        "id": "18135796486645465",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeIzKQQIOuf",
+        "timestamp": "2026-10-06T03:17:38+0000",
+        "title": "월급날 기분 좋은 거 정확히 며칠 가는지 숫자로 말해봐.",
+        "views": 117,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17958224883255170",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeHMLaWG1oJ",
+        "timestamp": "2026-10-05T12:17:44+0000",
+        "title": "통장 여러 개로 쪼개놓으면 진짜 손 안 대고 사는 사람 있음?",
+        "views": 218,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18197543731382964",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeGPkeojmSw",
+        "timestamp": "2026-10-05T03:28:09+0000",
+        "title": "지르고 바로 후회하는 사람 vs 한참 지나서 뒤늦게 후회하는 사람, 그 ",
+        "views": 1,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
