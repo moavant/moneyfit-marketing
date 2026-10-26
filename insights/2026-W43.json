@@ -1,0 +1,207 @@
+{
+  "weekKey": "2026-W43",
+  "label": "10/19~10/25",
+  "rangeStartIso": "2026-10-18T15:00:00.000Z",
+  "rangeEndIso": "2026-10-25T15:00:00.000Z",
+  "collectedAtIso": "2026-10-26T03:14:17.854Z",
+  "instagram": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 241,
+    "posts": 3,
+    "reach": 33,
+    "views": 97,
+    "saved": 0,
+    "interactions": 7,
+    "truncated": false,
+    "media": [
+      {
+        "id": "18438388006199795",
+        "permalink": "https://www.instagram.com/p/De1NjhilbfN/",
+        "timestamp": "2026-10-23T09:14:49+0000",
+        "title": "수능이 코앞으로 다가왔어요! 🍀",
+        "reach": 10,
+        "views": 32,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "18114291023606698",
+        "permalink": "https://www.instagram.com/p/DewD3iCm9Bx/",
+        "timestamp": "2026-10-21T09:13:57+0000",
+        "title": "슬슬 김장 준비 시작하셨나요? 🥬",
+        "reach": 11,
+        "views": 36,
+        "saved": 0,
+        "totalInteractions": 2
+      },
+      {
+        "id": "17910866961507116",
+        "permalink": "https://www.instagram.com/p/Deq5Nc7G7sB/",
+        "timestamp": "2026-10-19T09:04:38+0000",
+        "title": "당근마켓에서 판 돈, 가계부에 제대로 기록하고 계신가요? 📱",
+        "reach": 12,
+        "views": 29,
+        "saved": 0,
+        "totalInteractions": 3
+      }
+    ]
+  },
+  "threads": {
+    "collected": true,
+    "username": "moneyfit.moavant",
+    "followers": 34,
+    "posts": 13,
+    "views": 2893,
+    "likes": 9,
+    "replies": 14,
+    "reposts": 1,
+    "quotes": 0,
+    "truncated": false,
+    "media": [
+      {
+        "id": "17919718971455596",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/De6rM8BkbF_",
+        "timestamp": "2026-10-25T12:10:06+0000",
+        "title": "앱테크 아직 하는 사람 있음, 아니면 다 손절함?",
+        "views": 133,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18436977961198917",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/De5tWyrFREu",
+        "timestamp": "2026-10-25T03:09:41+0000",
+        "title": "가계부 앱 켜고 충격받는 거, 순서가 있더라.",
+        "views": 93,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17984178738120847",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/De4GZEoIP3x",
+        "timestamp": "2026-10-24T12:09:59+0000",
+        "title": "무지출 데이에 쿠폰이나 포인트로 결제한 것도 지출로 치는 사람 있음?",
+        "views": 89,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18127858241484751",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/De3IlidjLpl",
+        "timestamp": "2026-10-24T03:09:54+0000",
+        "title": "월급 300 받는 친구가 1년에 600 모았다길래 비법 물어봤다.",
+        "views": 778,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17878784025651471",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/De1iK-vkdGx",
+        "timestamp": "2026-10-23T12:14:59+0000",
+        "title": "서른 넘어서도 명절마다 부모님한테 용돈 받는 사람 있음?",
+        "views": 125,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18148442728562353",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/De0jxfpjeFh",
+        "timestamp": "2026-10-23T03:09:44+0000",
+        "title": "카드값 보고 소름 돋는 순간 3가지.txt",
+        "views": 37,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18112225769621600",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dey80noHERU",
+        "timestamp": "2026-10-22T12:10:09+0000",
+        "title": "짠테크파랑 탕진잼파, 스트레스 받는 타이밍이 정반대라는 거 알아?",
+        "views": 66,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17871636072647012",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Dex-_0sjviK",
+        "timestamp": "2026-10-22T03:09:55+0000",
+        "title": "결혼자금 모으면서 깨달은 것 세 가지.",
+        "views": 829,
+        "likes": 5,
+        "replies": 2,
+        "reposts": 1,
+        "quotes": 0
+      },
+      {
+        "id": "17920464270244522",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DevaN2alq1V",
+        "timestamp": "2026-10-21T03:10:02+0000",
+        "title": "지르고 후회해놓고 또 지르는 사람 있음?",
+        "views": 81,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18117673840809200",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DetzVH8m7TO",
+        "timestamp": "2026-10-20T12:11:00+0000",
+        "title": "부모님 용돈 1년치 다 더해봤다.",
+        "views": 10,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18112004501617441",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/Des1beGFLzs",
+        "timestamp": "2026-10-20T03:10:05+0000",
+        "title": "배달앱 주문내역 한 달치 다 더해봤다.",
+        "views": 130,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "18134690728675740",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DerOmFwm60S",
+        "timestamp": "2026-10-19T12:11:31+0000",
+        "title": "저축률 20%가 국민 평균이라던데.",
+        "views": 451,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      {
+        "id": "17921029899445502",
+        "permalink": "https://www.threads.com/@moneyfit.moavant/post/DeqQ0TaFIVU",
+        "timestamp": "2026-10-19T03:11:41+0000",
+        "title": "저축 귀찮아서 포기한 사람들 공통점.txt",
+        "views": 71,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      }
+    ]
+  }
+}
